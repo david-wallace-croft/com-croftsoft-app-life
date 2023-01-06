@@ -19,3 +19,43 @@ repository = "https://github.com/david-wallace-croft/com-croftsoft-app-life"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+console_error_panic_hook = "0.1.7"
+js-sys = "0.3.60"
+wasm-bindgen = "0.2.83"
+wee_alloc = { version = "0.4.5", optional = true }
+rand = "0.8.5"
+futures = "0.3.25"
+wasm-bindgen-futures = "0.4.33"
+anyhow = "1.0.66"
+
+[dependencies.getrandom]
+version = "0.2.8"
+features = [
+  "js",
+]
+
+[dependencies.web-sys]
+version = "0.3.60"
+features = [
+  "CanvasRenderingContext2d",
+  "Document",
+  "HtmlCanvasElement",
+  "HtmlDivElement",
+  "Window",
+  "console",
+]
+
+[dev-dependencies]
+futures = "0.3.25"
+js-sys = "0.3.60"
+wasm-bindgen-futures = "0.4.33"
+wasm-bindgen-test = "0.3.33"
+
+[features]
+default = ["wee_alloc"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+lto = true
