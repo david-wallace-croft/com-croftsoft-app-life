@@ -1,0 +1,21 @@
+[package]
+name = "com-croftsoft-app-life"
+version = "0.1.0"
+authors = ["David Wallace Croft <david@croftsoft.com>"]
+# Use the categories from https://crates.io/categories
+categories = ["games"]
+description = "Conway's Game of Life"
+edition = "2021"
+homepage = "https://www.croftsoft.com/"
+keywords = ["rust", "wasm"]
+# Remark this line out if your project is not open source
+license = "MIT"
+# Remark this line out when you publish to crates.io
+publish = false
+readme = "README.md"
+# Remark this line out if your project is not in a code repository
+repository = "https://github.com/david-wallace-croft/com-croftsoft-app-life"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
