@@ -1,6 +1,6 @@
 [package]
 name = "com-croftsoft-app-life"
-version = "0.1.0"
+version = "0.1.1-SNAPSHOT"
 authors = ["David Wallace Croft <david@croftsoft.com>"]
 # Use the categories from https://crates.io/categories
 categories = ["games"]
@@ -39,8 +39,15 @@ version = "0.3.60"
 features = [
   "CanvasRenderingContext2d",
   "Document",
+  "DomRect",
+  "Element",
+  "Event",
   "HtmlCanvasElement",
+  "HtmlCollection",
   "HtmlDivElement",
+  "HtmlInputElement",
+  "MouseEvent",
+  "Performance",
   "Window",
   "console",
 ]

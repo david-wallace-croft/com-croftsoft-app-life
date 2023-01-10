@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Rust version: 2023-01-09
-//! - Rust since: 2023-01-06
+//! - Rust since: 2023-01-09
 //! - Java version: 2008-11-05
 //! - Java since: 2008-11-04
 //!
@@ -18,26 +18,15 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use constants::INFO;
-use engine::functions::web_sys::log;
-use engine::looper::Looper;
-use wasm_bindgen::prelude::*;
-use wee_alloc::WeeAlloc;
+use crate::engine::configuration::Configuration;
 
-mod components;
-mod constants;
-mod engine;
-mod models;
-mod painters;
+pub static INFO: &str = "CroftSoft Life v0.1.0 Copyright 2023 CroftSoft Inc";
 
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: WeeAlloc = WeeAlloc::INIT;
+pub const FRAME_PERIOD_MILLIS_MINIMUM: f64 = 10.0;
+pub const FRAMES_PER_SECOND: f64 = 1.0;
+pub const SPACE_HEIGHT: usize = 100;
+pub const SPACE_WIDTH: usize = 100;
 
-#[wasm_bindgen(start)]
-pub fn main_js() -> Result<(), JsValue> {
-  console_error_panic_hook::set_once();
-  log(INFO);
-  Looper::launch();
-  Ok(())
-}
+pub const CONFIGURATION: Configuration = Configuration {
+  frame_period_millis: 1_000.0 / FRAMES_PER_SECOND,
+};
