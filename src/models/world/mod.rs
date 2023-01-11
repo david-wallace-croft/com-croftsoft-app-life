@@ -4,61 +4,38 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2023-01-09
-//! - Rust since: 2023-01-09
-//! - Java version: 2008-11-05
-//! - Java since: 2008-11-04
+//! - Version: 2023-01-10
+//! - Since: 2023-01-10
 //!
-//! # History
-//! - Adapted from the Java package com.croftsoft.apps.life
-//!   - In the Java-based [`CroftSoft Apps Library`]
-//!
-//! [`CroftSoft Apps Library`]: https://www.croftsoft.com/library/code/
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+use super::cells::Cells;
 use crate::engine::input::Input;
 use crate::engine::traits::Model;
 use core::cell::RefCell;
 use std::rc::Rc;
 
 pub struct World {
-  // clock: Rc<RefCell<Clock>>,
-  // fauna: Rc<RefCell<Fauna>>,
-  // flora: Rc<RefCell<Flora>>,
+  cells: Rc<RefCell<Cells>>,
   models: Vec<Rc<RefCell<dyn Model>>>,
 }
 
 // TODO: extract the trait?
-// impl World {
-//   pub fn clock_clone(&self) -> Rc<RefCell<Clock>> {
-//     self.clock.clone()
-//   }
-
-//   pub fn fauna_clone(&self) -> Rc<RefCell<Fauna>> {
-//     self.fauna.clone()
-//   }
-
-//   pub fn flora_clone(&self) -> Rc<RefCell<Flora>> {
-//     self.flora.clone()
-//   }
-// }
+impl World {
+  pub fn cells_clone(&self) -> Rc<RefCell<Cells>> {
+    self.cells.clone()
+  }
+}
 
 impl Default for World {
   fn default() -> Self {
-    // let clock = Rc::new(RefCell::new(Clock::default()));
-    // let flora = Rc::new(RefCell::new(Flora::default()));
-    // let fauna = Rc::new(RefCell::new(Fauna::new(clock.clone(), flora.clone())));
-    let models: Vec<Rc<RefCell<dyn Model>>> = vec![
-      // clock.clone(),
-      // flora.clone(),
-      // fauna.clone(),
-    ];
+    let cells = Rc::new(RefCell::new(Cells::default()));
+    cells.borrow_mut().randomize();
+    let models: Vec<Rc<RefCell<dyn Model>>> = vec![cells.clone()];
     Self {
-      // clock,
-      // fauna,
-      // flora,
+      cells,
       models,
     }
   }

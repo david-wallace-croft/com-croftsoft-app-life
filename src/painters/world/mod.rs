@@ -4,14 +4,14 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-09
+//! - Version: 2023-01-10
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-// use super::overlay::OverlayPainter;
+use super::cells::CellsPainter;
 use crate::constants::{SPACE_HEIGHT, SPACE_WIDTH};
 use crate::engine::traits::{CanvasPainter, Painter};
 use crate::models::world::World;
@@ -45,8 +45,12 @@ impl WorldPainter {
       BackgroundPainter::new(canvas_height, canvas_width);
     let scale_x = canvas_width / SPACE_WIDTH as f64;
     let scale_y = canvas_height / SPACE_HEIGHT as f64;
-    let canvas_painters: Vec<Box<dyn CanvasPainter>> =
-      vec![Box::new(background_painter)];
+    let cells_painter =
+      CellsPainter::new(world.cells_clone(), scale_x, scale_y);
+    let canvas_painters: Vec<Box<dyn CanvasPainter>> = vec![
+      Box::new(background_painter),
+      Box::new(cells_painter),
+    ];
     Self {
       canvas_painters,
       context,
