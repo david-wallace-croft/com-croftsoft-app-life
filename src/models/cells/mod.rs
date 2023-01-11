@@ -55,10 +55,10 @@ impl Cells {
     };
     let mut sum = 0;
     let col_array = [
-      west, 0, east,
+      west, x, east,
     ];
     let row_array = [
-      north, 0, south,
+      north, y, south,
     ];
     for c in col_array {
       for r in row_array {
