@@ -60,9 +60,11 @@ impl Cells {
     let row_array = [
       north, y, south,
     ];
-    for c in col_array {
-      for r in row_array {
-        if !(c == 0 && r == 0) && self.old[to_index_from_xy(c, r)] {
+    for c in 0..3 {
+      for r in 0..3 {
+        if !(c == 1 && r == 1)
+          && self.old[to_index_from_xy(col_array[c], row_array[r])]
+        {
           sum += 1
         };
       }
