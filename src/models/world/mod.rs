@@ -12,6 +12,7 @@
 // =============================================================================
 
 use super::cells::Cells;
+use super::clock::Clock;
 use crate::engine::input::Input;
 use crate::engine::traits::Model;
 use core::cell::RefCell;
@@ -19,6 +20,7 @@ use std::rc::Rc;
 
 pub struct World {
   cells: Rc<RefCell<Cells>>,
+  clock: Rc<RefCell<Clock>>,
   models: Vec<Rc<RefCell<dyn Model>>>,
 }
 
@@ -27,15 +29,23 @@ impl World {
   pub fn cells_clone(&self) -> Rc<RefCell<Cells>> {
     self.cells.clone()
   }
+
+  pub fn clock_clone(&self) -> Rc<RefCell<Clock>> {
+    self.clock.clone()
+  }
 }
 
 impl Default for World {
   fn default() -> Self {
     let cells = Rc::new(RefCell::new(Cells::default()));
-    cells.borrow_mut().randomize();
-    let models: Vec<Rc<RefCell<dyn Model>>> = vec![cells.clone()];
+    let clock = Rc::new(RefCell::new(Clock::default()));
+    let models: Vec<Rc<RefCell<dyn Model>>> = vec![
+      clock.clone(),
+      cells.clone(),
+    ];
     Self {
       cells,
+      clock,
       models,
     }
   }

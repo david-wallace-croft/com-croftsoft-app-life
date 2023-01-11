@@ -12,6 +12,7 @@
 // =============================================================================
 
 use super::cells::CellsPainter;
+use super::overlay::OverlayPainter;
 use crate::constants::{SPACE_HEIGHT, SPACE_WIDTH};
 use crate::engine::traits::{CanvasPainter, Painter};
 use crate::models::world::World;
@@ -47,9 +48,11 @@ impl WorldPainter {
     let scale_y = canvas_height / SPACE_HEIGHT as f64;
     let cells_painter =
       CellsPainter::new(world.cells_clone(), scale_x, scale_y);
+    let overlay_painter = OverlayPainter::new(world.clock_clone());
     let canvas_painters: Vec<Box<dyn CanvasPainter>> = vec![
       Box::new(background_painter),
       Box::new(cells_painter),
+      Box::new(overlay_painter),
     ];
     Self {
       canvas_painters,

@@ -70,7 +70,7 @@ impl Cells {
     sum
   }
 
-  pub fn randomize(&mut self) {
+  fn randomize(&mut self) {
     let mut thread_rng: ThreadRng = rand::thread_rng();
     for i in 0..CELL_COUNT {
       let roll: usize = thread_rng.gen_range(0..4);
@@ -91,8 +91,12 @@ impl Default for Cells {
 impl Model for Cells {
   fn update(
     &mut self,
-    _input: &Input,
+    input: &Input,
   ) {
+    if input.reset_requested {
+      self.randomize();
+      return;
+    }
     for i in 0..CELL_COUNT {
       // TODO: Can I transfer this as a slice or use a buffer?
       self.old[i] = self.new[i];
