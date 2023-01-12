@@ -54,16 +54,16 @@ impl Cells {
       0
     };
     let mut sum = 0;
-    let col_array = [
+    let column_array = [
       west, x, east,
     ];
     let row_array = [
       north, y, south,
     ];
-    for c in 0..3 {
-      for r in 0..3 {
-        if !(c == 1 && r == 1)
-          && self.old[to_index_from_xy(col_array[c], row_array[r])]
+    for (column_index, column_value) in column_array.iter().enumerate() {
+      for (row_index, row_value) in row_array.iter().enumerate() {
+        if !(column_index == 1 && row_index == 1)
+          && self.old[to_index_from_xy(*column_value, *row_value)]
         {
           sum += 1
         };
@@ -114,6 +114,9 @@ impl Model for Cells {
       } else {
         self.new[i] = false;
       }
+    }
+    if let Some(index) = input.cell_toggle_requested {
+      self.new[index] = !self.old[index];
     }
   }
 }
