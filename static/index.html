@@ -80,10 +80,20 @@ Description
 </h2>
 <ul>
 <li>
-[...]
+This is an implementation of
+<a
+  href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
+Conway's Game of Life</a>.
 </li>
 <li>
-[...]
+The display area shows a grid of cells that are either on (colored) or off
+(black).  At each time step, cells transition between on and off depending on
+the number of adjacent cells that are on.
+</li>
+<li>
+If the number of adjacent cells is less than two or more than three, it will
+turn off.  If the number is two, the cell will stay the same as it was.
+If three, the cell will turn on.
 </li>
 </ul>
 </section>
@@ -98,10 +108,10 @@ Objectives
 </h2>
 <ul>
 <li>
-[...]
+Note how spatiotemporal patterns emerge from these simple rules.
 </li>
 <li>
-[...]
+Make patterns that travel across the display area.
 </li>
 </ul>
 </section>
@@ -117,6 +127,9 @@ The Reset button restarts the simulation.
 <li>
 The Speed button toggles the simulation speed between slow and fast.
 </li>
+<li>
+Click on the display area to toggle the state of a cell between on and off.
+</li>
 </ul>
 </section>
 <section
@@ -126,10 +139,27 @@ History
 </h2>
 <ul>
 <li>
-[...]
+In 2008, I wrote a
+<a
+  href="https://www.croftsoft.com/library/software/life/"
+  target="_blank">
+Java-based implementation</a>
+of Conway's Game of Life.
+I also wrote an
+<a
+  href="https://www.croftsoft.com/library/tutorials/drools/"
+  target="_blank">
+implementation using Drools</a>,
+an open source Java rule engine.
 </li>
 <li>
-[...]
+This 2023 implementation uses Rust compiled to WebAssembly (Wasm) to get it to
+run in a webpage.  See my
+<a
+  href="https://www.croftsoft.com/people/david/research/rust-wasm/"
+  target="_blank">
+Rust and WebAssembly</a>
+research page for links to tutorials that I wrote on how to do this.
 </li>
 </ul>
 </section>
