@@ -29,7 +29,7 @@ impl OverlayPainter {
   }
 
   pub fn new(clock: Rc<RefCell<Clock>>) -> Self {
-    let fill_style: JsValue = JsValue::from_str("green");
+    let fill_style: JsValue = JsValue::from_str("white");
     Self {
       clock,
       fill_style,

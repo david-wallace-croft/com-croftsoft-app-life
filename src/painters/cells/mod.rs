@@ -35,7 +35,7 @@ impl CellsPainter {
     scale_x: f64,
     scale_y: f64,
   ) -> Self {
-    let fill_style = JsValue::from_str("#9999ff");
+    let fill_style = JsValue::from_str("lightgreen");
     let cells_height = scale_y / 2.0;
     let cells_width = scale_x / 2.0;
     Self {
