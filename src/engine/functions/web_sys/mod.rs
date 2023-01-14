@@ -21,8 +21,17 @@ use std::{cell::RefCell, rc::Rc};
 use wasm_bindgen::prelude::Closure;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{
-  console, window, Document, DomRect, Element, Event, EventTarget,
-  HtmlCanvasElement, HtmlElement, MouseEvent, Window,
+  console,
+  window,
+  Document,
+  DomRect,
+  Element,
+  // Event,
+  EventTarget,
+  HtmlCanvasElement,
+  HtmlElement,
+  MouseEvent,
+  Window,
 };
 
 type LoopClosure = Closure<dyn FnMut(f64)>;
@@ -35,28 +44,28 @@ pub trait LoopUpdater {
   );
 }
 
-pub fn add_change_handler(elem: HtmlElement) -> UnboundedReceiver<Event> {
-  let (mut change_sender, change_receiver) = unbounded();
-  let event_closure = move |event: Event| {
-    let _result: Result<(), futures::channel::mpsc::SendError> =
-      change_sender.start_send(event);
-  };
-  let event_closure_box: Box<dyn FnMut(Event)> = Box::new(event_closure);
-  let on_change_closure: Closure<dyn FnMut(Event)> =
-    Closure::wrap(event_closure_box);
-  let closure_as_js_value_ref: &JsValue = on_change_closure.as_ref();
-  let js_function_ref: &Function = closure_as_js_value_ref.unchecked_ref();
-  let js_function_ref_option: Option<&Function> = Some(js_function_ref);
-  elem.set_onchange(js_function_ref_option);
-  on_change_closure.forget();
-  change_receiver
-}
+// pub fn add_change_handler(elem: HtmlElement) -> UnboundedReceiver<Event> {
+//   let (mut change_sender, change_receiver) = unbounded();
+//   let event_closure = move |event: Event| {
+//     let _result: Result<(), futures::channel::mpsc::SendError> =
+//       change_sender.start_send(event);
+//   };
+//   let event_closure_box: Box<dyn FnMut(Event)> = Box::new(event_closure);
+//   let on_change_closure: Closure<dyn FnMut(Event)> =
+//     Closure::wrap(event_closure_box);
+//   let closure_as_js_value_ref: &JsValue = on_change_closure.as_ref();
+//   let js_function_ref: &Function = closure_as_js_value_ref.unchecked_ref();
+//   let js_function_ref_option: Option<&Function> = Some(js_function_ref);
+//   elem.set_onchange(js_function_ref_option);
+//   on_change_closure.forget();
+//   change_receiver
+// }
 
-pub fn add_change_handler_by_id(id: &str) -> Option<UnboundedReceiver<Event>> {
-  let html_element = get_html_element_by_id(id);
-  // TODO: return None if fails
-  Some(add_change_handler(html_element))
-}
+// pub fn add_change_handler_by_id(id: &str) -> Option<UnboundedReceiver<Event>> {
+//   let html_element = get_html_element_by_id(id);
+//   // TODO: return None if fails
+//   Some(add_change_handler(html_element))
+// }
 
 pub fn add_click_handler(elem: HtmlElement) -> UnboundedReceiver<()> {
   let (mut click_sender, click_receiver) = unbounded();
