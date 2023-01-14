@@ -27,7 +27,7 @@ impl Model for Clock {
     if input.reset_requested {
       self.time = 0;
     } else {
-      self.time += 1;
+      self.time = self.time.saturating_add(1);
     }
   }
 }
