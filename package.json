@@ -13,6 +13,7 @@
     "@webpack-cli/serve": "^2.0.1",
     "copy-webpack-plugin": "^5.1.2",
     "rimraf": "^3.0.2",
+    "wasm-pack": "^0.10.3",
     "webpack": "^5.75.0",
     "webpack-dev-server": "^4.11.1"
   }
