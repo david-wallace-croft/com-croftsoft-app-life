@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-10
+//! - Version: 2023-01-16
 //! - Since: 2023-01-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -17,6 +17,7 @@ use crate::engine::functions::location::{
 };
 use crate::engine::input::Input;
 use crate::engine::traits::Model;
+use core::mem::swap;
 
 // TODO: Should I be using the js_sys random?
 use rand::{rngs::ThreadRng, Rng};
@@ -99,10 +100,7 @@ impl Model for Cells {
       self.randomize();
       return;
     }
-    for i in 0..CELL_COUNT {
-      // TODO: Can I transfer this as a slice or use a buffer?
-      self.old[i] = self.new[i];
-    }
+    swap(&mut self.old, &mut self.new);
     for i in 0..CELL_COUNT {
       let count = self.count_adjacent_alive(i);
       if count < 2 {
