@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-10
+//! - Version: 2023-01-18
 //! - Since: 2023-01-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -12,17 +12,17 @@
 // =============================================================================
 
 use crate::engine::input::Input;
-use crate::engine::traits::Model;
+use com_croftsoft_lib_role::Updater;
 
 #[derive(Default)]
 pub struct Clock {
   pub time: usize,
 }
 
-impl Model for Clock {
+impl Updater<Input> for Clock {
   fn update(
     &mut self,
-    input: &Input,
+    input: Input,
   ) {
     if input.reset_requested {
       self.time = 0;

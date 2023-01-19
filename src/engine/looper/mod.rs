@@ -13,7 +13,7 @@
 
 use super::configuration::Configuration;
 use super::input::Input;
-use super::traits::{Component, Model, Painter};
+use super::traits::{Component, Painter};
 use crate::components::life::LifeComponent;
 use crate::constants::{CONFIGURATION, FRAME_PERIOD_MILLIS_MINIMUM};
 use crate::engine::functions::web_sys::spawn_local_loop;
@@ -86,7 +86,7 @@ impl Updater<f64> for Looper {
       return;
     }
     self.life_component.update(&mut self.input);
-    self.world.borrow_mut().update(&self.input);
+    self.world.borrow_mut().update(self.input);
     self.life_component.paint();
     self.update_frame_rate();
     self.next_update_time = update_time + self.frame_period_millis;

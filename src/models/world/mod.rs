@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-10
+//! - Version: 2023-01-18
 //! - Since: 2023-01-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -14,14 +14,14 @@
 use super::cells::Cells;
 use super::clock::Clock;
 use crate::engine::input::Input;
-use crate::engine::traits::Model;
+use com_croftsoft_lib_role::Updater;
 use core::cell::RefCell;
 use std::rc::Rc;
 
 pub struct World {
   cells: Rc<RefCell<Cells>>,
   clock: Rc<RefCell<Clock>>,
-  models: Vec<Rc<RefCell<dyn Model>>>,
+  models: Vec<Rc<RefCell<dyn Updater<Input>>>>,
 }
 
 // TODO: extract the trait?
@@ -39,7 +39,7 @@ impl Default for World {
   fn default() -> Self {
     let cells = Rc::new(RefCell::new(Cells::default()));
     let clock = Rc::new(RefCell::new(Clock::default()));
-    let models: Vec<Rc<RefCell<dyn Model>>> = vec![
+    let models: Vec<Rc<RefCell<dyn Updater<Input>>>> = vec![
       clock.clone(),
       cells.clone(),
     ];
@@ -51,10 +51,10 @@ impl Default for World {
   }
 }
 
-impl Model for World {
+impl Updater<Input> for World {
   fn update(
     &mut self,
-    input: &Input,
+    input: Input,
   ) {
     self.models.iter().for_each(|model| model.borrow_mut().update(input));
   }

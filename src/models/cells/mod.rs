@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-16
+//! - Version: 2023-01-18
 //! - Since: 2023-01-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -16,9 +16,8 @@ use crate::engine::functions::location::{
   to_index_from_xy, to_x_from_index, to_y_from_index,
 };
 use crate::engine::input::Input;
-use crate::engine::traits::Model;
+use com_croftsoft_lib_role::Updater;
 use core::mem::swap;
-
 // TODO: Should I be using the js_sys random?
 use rand::{rngs::ThreadRng, Rng};
 
@@ -91,10 +90,10 @@ impl Default for Cells {
   }
 }
 
-impl Model for Cells {
+impl Updater<Input> for Cells {
   fn update(
     &mut self,
-    input: &Input,
+    input: Input,
   ) {
     if input.reset_requested {
       self.randomize();
