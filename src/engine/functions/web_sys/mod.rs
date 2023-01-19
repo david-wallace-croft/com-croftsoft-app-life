@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-09
+//! - Version: 2023-01-18
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -15,6 +15,7 @@
 // TODO: see https://github.com/rustwasm/gloo
 
 use anyhow::{anyhow, Result};
+use com_croftsoft_lib_role::Updater;
 use futures::channel::mpsc::{unbounded, UnboundedReceiver};
 use js_sys::Function;
 use std::{cell::RefCell, rc::Rc};
@@ -155,19 +156,19 @@ pub fn request_animation_frame(
     .map_err(|err| anyhow!("Cannot request animation frame {:#?}", err))
 }
 
-pub fn spawn_local_loop<L: LoopUpdater + 'static>(loop_updater: L) {
+pub fn spawn_local_loop<L: Updater<f64> + 'static>(loop_updater: L) {
   wasm_bindgen_futures::spawn_local(async move {
     start_looping(loop_updater).await.expect("loop start failed");
   });
 }
 
-pub async fn start_looping<L: LoopUpdater + 'static>(
+pub async fn start_looping<L: Updater<f64> + 'static>(
   mut loop_updater: L
 ) -> Result<()> {
   let f: Rc<RefCell<Option<LoopClosure>>> = Rc::new(RefCell::new(None));
   let g = f.clone();
   *g.borrow_mut() = Some(Closure::wrap(Box::new(move |update_time: f64| {
-    loop_updater.update_loop(update_time);
+    loop_updater.update(update_time);
     let _result: Result<i32, anyhow::Error> =
       request_animation_frame(f.borrow().as_ref().unwrap());
   })));

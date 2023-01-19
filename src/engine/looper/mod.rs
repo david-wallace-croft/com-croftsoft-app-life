@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-09
+//! - Version: 2023-01-18
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -16,8 +16,9 @@ use super::input::Input;
 use super::traits::{Component, Model, Painter};
 use crate::components::life::LifeComponent;
 use crate::constants::{CONFIGURATION, FRAME_PERIOD_MILLIS_MINIMUM};
-use crate::engine::functions::web_sys::{spawn_local_loop, LoopUpdater};
+use crate::engine::functions::web_sys::spawn_local_loop;
 use crate::models::world::World;
+use com_croftsoft_lib_role::Updater;
 use core::cell::RefCell;
 use std::rc::Rc;
 
@@ -76,9 +77,8 @@ impl Default for Looper {
   }
 }
 
-impl LoopUpdater for Looper {
-  // TODO: rename this function
-  fn update_loop(
+impl Updater<f64> for Looper {
+  fn update(
     &mut self,
     update_time: f64,
   ) {
