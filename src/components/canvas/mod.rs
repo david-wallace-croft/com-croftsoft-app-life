@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2023-01-09
+//! - Rust version: 2023-01-19
 //! - Rust since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -17,9 +17,10 @@ use crate::engine::functions::web_sys::{
   add_mouse_down_handler_by_id, get_canvas_xy, get_html_canvas_element_by_id,
 };
 use crate::engine::input::Input;
-use crate::engine::traits::{Component, Painter};
+use crate::engine::traits::Component;
 use crate::models::world::World;
 use crate::painters::world::WorldPainter;
+use com_croftsoft_lib_role::{Painter, Updater};
 use core::cell::RefCell;
 use futures::channel::mpsc::{TryRecvError, UnboundedReceiver};
 use std::rc::Rc;
@@ -27,8 +28,9 @@ use web_sys::{HtmlCanvasElement, MouseEvent};
 
 pub struct CanvasComponent {
   id: String,
-  unbounded_receiver_option: Option<UnboundedReceiver<MouseEvent>>,
+  input: Rc<RefCell<Input>>,
   root_painter_option: Option<WorldPainter>,
+  unbounded_receiver_option: Option<UnboundedReceiver<MouseEvent>>,
   world: Rc<RefCell<World>>,
 }
 
@@ -45,12 +47,14 @@ impl CanvasComponent {
 
   pub fn new(
     id: &str,
+    input: Rc<RefCell<Input>>,
     world: Rc<RefCell<World>>,
   ) -> Self {
     Self {
       id: String::from(id),
-      unbounded_receiver_option: None,
+      input,
       root_painter_option: None,
+      unbounded_receiver_option: None,
       world,
     }
   }
@@ -99,24 +103,23 @@ impl Component for CanvasComponent {
       self.id
     )
   }
-
-  fn update(
-    &mut self,
-    input: &mut Input,
-  ) {
-    let mouse_event_option = self.poll_mouse_event();
-    if let Some(mouse_event) = mouse_event_option {
-      let (canvas_x, canvas_y) = get_canvas_xy(&mouse_event);
-      let index = self.to_world_index_from_canvas_xy(canvas_x, canvas_y);
-      input.cell_toggle_requested = Some(index);
-    }
-  }
 }
 
 impl Painter for CanvasComponent {
   fn paint(&self) {
     if let Some(root_painter) = &self.root_painter_option {
       root_painter.paint();
+    }
+  }
+}
+
+impl Updater for CanvasComponent {
+  fn update(&mut self) {
+    let mouse_event_option = self.poll_mouse_event();
+    if let Some(mouse_event) = mouse_event_option {
+      let (canvas_x, canvas_y) = get_canvas_xy(&mouse_event);
+      let index = self.to_world_index_from_canvas_xy(canvas_x, canvas_y);
+      self.input.borrow_mut().cell_toggle_requested = Some(index);
     }
   }
 }

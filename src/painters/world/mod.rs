@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-10
+//! - Version: 2023-01-19
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -14,9 +14,10 @@
 use super::cells::CellsPainter;
 use super::overlay::OverlayPainter;
 use crate::constants::{SPACE_HEIGHT, SPACE_WIDTH};
-use crate::engine::traits::{CanvasPainter, Painter};
+use crate::engine::traits::CanvasPainter;
 use crate::models::world::World;
 use crate::painters::background::BackgroundPainter;
+use com_croftsoft_lib_role::Painter;
 use js_sys::Object;
 use wasm_bindgen::JsCast;
 use web_sys::{

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-18
+//! - Version: 2023-01-19
 //! - Since: 2023-01-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -21,10 +21,9 @@ use std::rc::Rc;
 pub struct World {
   cells: Rc<RefCell<Cells>>,
   clock: Rc<RefCell<Clock>>,
-  models: Vec<Rc<RefCell<dyn Updater<Input>>>>,
+  models: Vec<Rc<RefCell<dyn Updater>>>,
 }
 
-// TODO: extract the trait?
 impl World {
   pub fn cells_clone(&self) -> Rc<RefCell<Cells>> {
     self.cells.clone()
@@ -33,13 +32,11 @@ impl World {
   pub fn clock_clone(&self) -> Rc<RefCell<Clock>> {
     self.clock.clone()
   }
-}
 
-impl Default for World {
-  fn default() -> Self {
-    let cells = Rc::new(RefCell::new(Cells::default()));
-    let clock = Rc::new(RefCell::new(Clock::default()));
-    let models: Vec<Rc<RefCell<dyn Updater<Input>>>> = vec![
+  pub fn new(input: Rc<RefCell<Input>>) -> Self {
+    let cells = Rc::new(RefCell::new(Cells::new(input.clone())));
+    let clock = Rc::new(RefCell::new(Clock::new(input)));
+    let models: Vec<Rc<RefCell<dyn Updater>>> = vec![
       clock.clone(),
       cells.clone(),
     ];
@@ -51,11 +48,8 @@ impl Default for World {
   }
 }
 
-impl Updater<Input> for World {
-  fn update(
-    &mut self,
-    input: Input,
-  ) {
-    self.models.iter().for_each(|model| model.borrow_mut().update(input));
+impl Updater for World {
+  fn update(&mut self) {
+    self.models.iter().for_each(|model| model.borrow_mut().update());
   }
 }

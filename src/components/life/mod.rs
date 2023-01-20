@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-11
+//! - Version: 2023-01-19
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -16,8 +16,9 @@ use super::reset::ResetComponent;
 use super::speed::SpeedComponent;
 use crate::engine::functions::web_sys::get_window;
 use crate::engine::input::Input;
-use crate::engine::traits::{Component, Painter};
+use crate::engine::traits::Component;
 use crate::models::world::World;
+use com_croftsoft_lib_role::{Painter, Updater};
 use core::cell::RefCell;
 use std::rc::Rc;
 use web_sys::{Document, HtmlCollection};
@@ -33,12 +34,18 @@ impl LifeComponent {
   // TODO: do something with the ID
   pub fn new(
     _id: &str,
+    input: Rc<RefCell<Input>>,
     world: Rc<RefCell<World>>,
   ) -> Self {
-    let canvas_component =
-      Rc::new(RefCell::new(CanvasComponent::new("canvas", world)));
-    let reset_component = Rc::new(RefCell::new(ResetComponent::new("reset")));
-    let speed_component = Rc::new(RefCell::new(SpeedComponent::new("speed")));
+    let canvas_component = Rc::new(RefCell::new(CanvasComponent::new(
+      "canvas",
+      input.clone(),
+      world,
+    )));
+    let reset_component =
+      Rc::new(RefCell::new(ResetComponent::new("reset", input.clone())));
+    let speed_component =
+      Rc::new(RefCell::new(SpeedComponent::new("speed", input)));
     let components: [Rc<RefCell<dyn Component>>; 3] = [
       canvas_component.clone(),
       reset_component.clone(),
@@ -81,20 +88,19 @@ impl Component for LifeComponent {
     ]
     .join("\n")
   }
-
-  fn update(
-    &mut self,
-    input: &mut Input,
-  ) {
-    self
-      .components
-      .iter()
-      .for_each(|component| component.borrow_mut().update(input));
-  }
 }
 
 impl Painter for LifeComponent {
   fn paint(&self) {
     self.canvas_component.borrow().paint();
+  }
+}
+
+impl Updater for LifeComponent {
+  fn update(&mut self) {
+    self
+      .components
+      .iter()
+      .for_each(|component| component.borrow_mut().update());
   }
 }
