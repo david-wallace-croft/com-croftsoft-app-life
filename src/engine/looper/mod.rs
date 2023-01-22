@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-19
+//! - Version: 2023-01-22
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -14,12 +14,11 @@
 use super::configuration::Configuration;
 use super::functions::web_sys::LoopUpdater;
 use super::input::Input;
-use super::traits::Component;
 use crate::components::life::LifeComponent;
 use crate::constants::{CONFIGURATION, FRAME_PERIOD_MILLIS_MINIMUM};
 use crate::engine::functions::web_sys::spawn_local_loop;
 use crate::models::world::World;
-use com_croftsoft_lib_role::{Painter, Updater};
+use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
 use std::rc::Rc;
 
@@ -34,14 +33,9 @@ pub struct Looper {
 }
 
 impl Looper {
-  pub fn init(&mut self) {
-    self.life_component.init();
-    self.input.borrow_mut().reset_requested = true;
-  }
-
   pub fn launch() {
     let mut looper = Looper::default();
-    looper.init();
+    looper.initialize();
     spawn_local_loop(looper);
   }
 
@@ -78,6 +72,13 @@ impl Looper {
 impl Default for Looper {
   fn default() -> Self {
     Looper::new(CONFIGURATION)
+  }
+}
+
+impl Initializer for Looper {
+  fn initialize(&mut self) {
+    self.life_component.initialize();
+    self.input.borrow_mut().reset_requested = true;
   }
 }
 

@@ -4,14 +4,14 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-19
+//! - Version: 2023-01-22
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use com_croftsoft_lib_role::Updater;
+use com_croftsoft_lib_role::{Initializer, Updater};
 use web_sys::CanvasRenderingContext2d;
 
 // TODO: Maybe merge with WorldPainter
@@ -22,8 +22,6 @@ pub trait CanvasPainter {
   );
 }
 
-pub trait Component: Updater {
-  fn init(&mut self);
-
+pub trait Component: Initializer + Updater {
   fn make_html(&self) -> String;
 }

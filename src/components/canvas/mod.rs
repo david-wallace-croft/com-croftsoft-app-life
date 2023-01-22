@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2023-01-19
+//! - Rust version: 2023-01-22
 //! - Rust since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -20,7 +20,7 @@ use crate::engine::input::Input;
 use crate::engine::traits::Component;
 use crate::models::world::World;
 use crate::painters::world::WorldPainter;
-use com_croftsoft_lib_role::{Painter, Updater};
+use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
 use futures::channel::mpsc::{TryRecvError, UnboundedReceiver};
 use std::rc::Rc;
@@ -91,17 +91,19 @@ impl CanvasComponent {
 }
 
 impl Component for CanvasComponent {
-  fn init(&mut self) {
-    self.unbounded_receiver_option = add_mouse_down_handler_by_id(&self.id);
-    self.root_painter_option =
-      Some(WorldPainter::new("canvas", &self.world.borrow()));
-  }
-
   fn make_html(&self) -> String {
     format!(
       "<canvas id=\"{}\" height=\"600\" style=\"cursor: crosshair\" width=\"600\"></canvas>",
       self.id
     )
+  }
+}
+
+impl Initializer for CanvasComponent {
+  fn initialize(&mut self) {
+    self.unbounded_receiver_option = add_mouse_down_handler_by_id(&self.id);
+    self.root_painter_option =
+      Some(WorldPainter::new("canvas", &self.world.borrow()));
   }
 }
 

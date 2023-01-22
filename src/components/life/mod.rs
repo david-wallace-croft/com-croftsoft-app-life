@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-19
+//! - Version: 2023-01-22
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -18,7 +18,7 @@ use crate::engine::functions::web_sys::get_window;
 use crate::engine::input::Input;
 use crate::engine::traits::Component;
 use crate::models::world::World;
-use com_croftsoft_lib_role::{Painter, Updater};
+use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
 use std::rc::Rc;
 use web_sys::{Document, HtmlCollection};
@@ -61,18 +61,6 @@ impl LifeComponent {
 }
 
 impl Component for LifeComponent {
-  fn init(&mut self) {
-    let document: Document = get_window().unwrap().document().unwrap();
-    let html_collection: HtmlCollection =
-      document.get_elements_by_tag_name("com-croftsoft-app-life");
-    let element_option = html_collection.item(0);
-    let element = element_option.unwrap();
-    let evolve_html: String = self.make_html();
-    // TODO: Remove existing child nodes
-    let _result = element.insert_adjacent_html("afterbegin", &evolve_html);
-    self.components.iter().for_each(|component| component.borrow_mut().init());
-  }
-
   fn make_html(&self) -> String {
     let canvas_html: String = self.canvas_component.borrow().make_html();
     let reset_html: String = self.reset_component.borrow().make_html();
@@ -87,6 +75,23 @@ impl Component for LifeComponent {
       String::from("</div>"),
     ]
     .join("\n")
+  }
+}
+
+impl Initializer for LifeComponent {
+  fn initialize(&mut self) {
+    let document: Document = get_window().unwrap().document().unwrap();
+    let html_collection: HtmlCollection =
+      document.get_elements_by_tag_name("com-croftsoft-app-life");
+    let element_option = html_collection.item(0);
+    let element = element_option.unwrap();
+    let evolve_html: String = self.make_html();
+    // TODO: Remove existing child nodes
+    let _result = element.insert_adjacent_html("afterbegin", &evolve_html);
+    self
+      .components
+      .iter()
+      .for_each(|component| component.borrow_mut().initialize());
   }
 }
 

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-19
+//! - Version: 2023-01-22
 //! - Since: 2023-01-11
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -14,7 +14,7 @@
 use crate::engine::functions::web_sys::add_click_handler_by_id;
 use crate::engine::input::Input;
 use crate::engine::traits::Component;
-use com_croftsoft_lib_role::Updater;
+use com_croftsoft_lib_role::{Initializer, Updater};
 use core::cell::RefCell;
 use futures::channel::mpsc::UnboundedReceiver;
 use std::rc::Rc;
@@ -49,12 +49,14 @@ impl SpeedComponent {
 }
 
 impl Component for SpeedComponent {
-  fn init(&mut self) {
-    self.unbounded_receiver = add_click_handler_by_id(&self.id);
-  }
-
   fn make_html(&self) -> String {
     format!("<button id=\"{}\">Speed</button>", self.id)
+  }
+}
+
+impl Initializer for SpeedComponent {
+  fn initialize(&mut self) {
+    self.unbounded_receiver = add_click_handler_by_id(&self.id);
   }
 }
 
