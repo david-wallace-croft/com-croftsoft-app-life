@@ -20,8 +20,7 @@
 
 use crate::engine::configuration::Configuration;
 
-pub static INFO: &str =
-  "CroftSoft Life v0.2.1-SNAPSHOT Copyright 2023 CroftSoft Inc";
+pub static INFO: &str = "CroftSoft Life v0.2.1 Copyright 2023 CroftSoft Inc";
 
 pub const CELL_COUNT: usize = SPACE_HEIGHT * SPACE_WIDTH;
 pub const FRAME_PERIOD_MILLIS_MINIMUM: f64 = 10.0;
