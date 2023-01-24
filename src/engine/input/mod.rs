@@ -4,12 +4,16 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-19
+//! - Version: 2023-01-23
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
+
+use crate::models::world::WorldInput;
+
+// TODO: move this to a different module
 
 #[derive(Default)]
 pub struct Input {
@@ -23,5 +27,15 @@ impl Input {
     self.cell_toggle_requested = None;
     self.reset_requested = false;
     self.speed_toggle_requested = false;
+  }
+}
+
+impl WorldInput for Input {
+  fn get_cell_toggle_requested(&self) -> Option<usize> {
+    self.cell_toggle_requested
+  }
+
+  fn get_reset_requested(&self) -> bool {
+    self.reset_requested
   }
 }

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-19
+//! - Version: 2023-01-23
 //! - Since: 2023-01-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -15,7 +15,6 @@ use crate::constants::{CELL_COUNT, SPACE_HEIGHT, SPACE_WIDTH};
 use crate::engine::functions::location::{
   to_index_from_xy, to_x_from_index, to_y_from_index,
 };
-use crate::engine::input::Input;
 use com_croftsoft_lib_role::Updater;
 use core::cell::RefCell;
 use core::mem::swap;
@@ -23,8 +22,13 @@ use std::rc::Rc;
 // TODO: Should I be using the js_sys random?
 use rand::{rngs::ThreadRng, Rng};
 
+pub trait CellsInput {
+  fn get_cell_toggle_requested(&self) -> Option<usize>;
+  fn get_reset_requested(&self) -> bool;
+}
+
 pub struct Cells {
-  input: Rc<RefCell<Input>>,
+  input: Rc<RefCell<dyn CellsInput>>,
   pub new: [bool; CELL_COUNT],
   old: [bool; CELL_COUNT],
 }
@@ -75,7 +79,7 @@ impl Cells {
     sum
   }
 
-  pub fn new(input: Rc<RefCell<Input>>) -> Self {
+  pub fn new(input: Rc<RefCell<dyn CellsInput>>) -> Self {
     Self {
       input,
       new: [false; CELL_COUNT],
@@ -94,7 +98,7 @@ impl Cells {
 
 impl Updater for Cells {
   fn update(&mut self) {
-    if self.input.borrow().reset_requested {
+    if self.input.borrow().get_reset_requested() {
       self.randomize();
       return;
     }
@@ -111,7 +115,7 @@ impl Updater for Cells {
         self.new[i] = false;
       }
     }
-    if let Some(index) = self.input.borrow().cell_toggle_requested {
+    if let Some(index) = self.input.borrow().get_cell_toggle_requested() {
       self.new[index] = !self.old[index];
     }
   }

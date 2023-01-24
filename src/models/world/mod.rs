@@ -11,12 +11,44 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use super::cells::Cells;
-use super::clock::Clock;
-use crate::engine::input::Input;
+use super::cells::{Cells, CellsInput};
+use super::clock::{Clock, ClockInput};
 use com_croftsoft_lib_role::Updater;
 use core::cell::RefCell;
 use std::rc::Rc;
+
+pub trait WorldInput {
+  fn get_cell_toggle_requested(&self) -> Option<usize>;
+  fn get_reset_requested(&self) -> bool;
+}
+
+struct WorldInputUpcastAdapter {
+  input: Rc<RefCell<dyn WorldInput>>,
+}
+
+impl WorldInputUpcastAdapter {
+  fn new(input: Rc<RefCell<dyn WorldInput>>) -> Self {
+    Self {
+      input,
+    }
+  }
+}
+
+impl CellsInput for WorldInputUpcastAdapter {
+  fn get_cell_toggle_requested(&self) -> Option<usize> {
+    self.input.borrow().get_cell_toggle_requested()
+  }
+
+  fn get_reset_requested(&self) -> bool {
+    self.input.borrow().get_reset_requested()
+  }
+}
+
+impl ClockInput for WorldInputUpcastAdapter {
+  fn get_reset_requested(&self) -> bool {
+    self.input.borrow().get_reset_requested()
+  }
+}
 
 pub struct World {
   cells: Rc<RefCell<Cells>>,
@@ -33,9 +65,12 @@ impl World {
     self.clock.clone()
   }
 
-  pub fn new(input: Rc<RefCell<Input>>) -> Self {
-    let cells = Rc::new(RefCell::new(Cells::new(input.clone())));
-    let clock = Rc::new(RefCell::new(Clock::new(input)));
+  pub fn new(input: Rc<RefCell<dyn WorldInput>>) -> Self {
+    let world_input_upcast_adapter =
+      Rc::new(RefCell::new(WorldInputUpcastAdapter::new(input)));
+    let cells =
+      Rc::new(RefCell::new(Cells::new(world_input_upcast_adapter.clone())));
+    let clock = Rc::new(RefCell::new(Clock::new(world_input_upcast_adapter)));
     let models: [Rc<RefCell<dyn Updater>>; 2] = [
       clock.clone(),
       cells.clone(),
