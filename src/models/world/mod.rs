@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-19
+//! - Version: 2023-01-23
 //! - Since: 2023-01-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -21,7 +21,7 @@ use std::rc::Rc;
 pub struct World {
   cells: Rc<RefCell<Cells>>,
   clock: Rc<RefCell<Clock>>,
-  models: Vec<Rc<RefCell<dyn Updater>>>,
+  models: [Rc<RefCell<dyn Updater>>; 2],
 }
 
 impl World {
@@ -36,7 +36,7 @@ impl World {
   pub fn new(input: Rc<RefCell<Input>>) -> Self {
     let cells = Rc::new(RefCell::new(Cells::new(input.clone())));
     let clock = Rc::new(RefCell::new(Clock::new(input)));
-    let models: Vec<Rc<RefCell<dyn Updater>>> = vec![
+    let models: [Rc<RefCell<dyn Updater>>; 2] = [
       clock.clone(),
       cells.clone(),
     ];
