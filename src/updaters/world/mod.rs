@@ -52,8 +52,7 @@ impl ClockUpdaterInput for WorldUpdaterInputAdapter {
 }
 
 pub struct WorldUpdater {
-  cells_updater: CellsUpdater,
-  clock_updater: ClockUpdater,
+  updaters: [Box<dyn Updater>; 2],
 }
 
 impl WorldUpdater {
@@ -69,16 +68,18 @@ impl WorldUpdater {
     let cells_updater =
       CellsUpdater::new(cells, world_input_upcast_adapter.clone());
     let clock_updater = ClockUpdater::new(clock, world_input_upcast_adapter);
+    let updaters: [Box<dyn Updater>; 2] = [
+      Box::new(clock_updater),
+      Box::new(cells_updater),
+    ];
     Self {
-      cells_updater,
-      clock_updater,
+      updaters,
     }
   }
 }
 
 impl Updater for WorldUpdater {
   fn update(&mut self) {
-    self.clock_updater.update();
-    self.cells_updater.update();
+    self.updaters.iter_mut().for_each(|updater| updater.update());
   }
 }
