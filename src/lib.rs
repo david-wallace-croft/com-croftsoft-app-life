@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2023-01-09
+//! - Rust version: 2023-01-24
 //! - Rust since: 2023-01-06
 //! - Java version: 2008-11-05
 //! - Java since: 2008-11-04
@@ -29,6 +29,7 @@ mod constants;
 mod engine;
 mod models;
 mod painters;
+mod updaters;
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]

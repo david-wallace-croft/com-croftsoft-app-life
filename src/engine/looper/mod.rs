@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-22
+//! - Version: 2023-01-24
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -18,6 +18,7 @@ use crate::components::life::LifeComponent;
 use crate::constants::{CONFIGURATION, FRAME_PERIOD_MILLIS_MINIMUM};
 use crate::engine::functions::web_sys::spawn_local_loop;
 use crate::models::world::World;
+use crate::updaters::world::WorldUpdater;
 use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
 use std::rc::Rc;
@@ -29,7 +30,7 @@ pub struct Looper {
   input: Rc<RefCell<Input>>,
   life_component: LifeComponent,
   next_update_time: f64,
-  world: Rc<RefCell<World>>,
+  world_updater: WorldUpdater,
 }
 
 impl Looper {
@@ -44,16 +45,16 @@ impl Looper {
       frame_period_millis,
     } = configuration;
     let input = Rc::new(RefCell::new(Input::default()));
-    let world = Rc::new(RefCell::new(World::new(input.clone())));
-    let life_component =
-      LifeComponent::new("life", input.clone(), world.clone());
+    let world = Rc::new(RefCell::new(World::default()));
+    let world_updater = WorldUpdater::new(input.clone(), world.clone());
+    let life_component = LifeComponent::new("life", input.clone(), world);
     Self {
       configuration,
       input,
       frame_period_millis,
       life_component,
       next_update_time: 0.0,
-      world,
+      world_updater,
     }
   }
 
@@ -91,7 +92,7 @@ impl LoopUpdater for Looper {
       return;
     }
     self.life_component.update();
-    self.world.borrow_mut().update();
+    self.world_updater.update();
     self.life_component.paint();
     self.update_frame_rate();
     self.next_update_time = update_time + self.frame_period_millis;

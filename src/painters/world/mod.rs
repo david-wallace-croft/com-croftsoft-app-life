@@ -1,10 +1,10 @@
 // =============================================================================
-//! - WorldPainter for CroftSoft Life
+//! - World Painter for CroftSoft Life
 //!
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-19
+//! - Version: 2023-01-24
 //! - Since: 2023-01-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -48,8 +48,8 @@ impl WorldPainter {
     let scale_x = canvas_width / SPACE_WIDTH as f64;
     let scale_y = canvas_height / SPACE_HEIGHT as f64;
     let cells_painter =
-      CellsPainter::new(world.cells_clone(), scale_x, scale_y);
-    let overlay_painter = OverlayPainter::new(world.clock_clone());
+      CellsPainter::new(world.cells.clone(), scale_x, scale_y);
+    let overlay_painter = OverlayPainter::new(world.clock.clone());
     let canvas_painters: Vec<Box<dyn CanvasPainter>> = vec![
       Box::new(background_painter),
       Box::new(cells_painter),
