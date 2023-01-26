@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-24
+//! - Version: 2023-01-25
 //! - Since: 2023-01-24
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -60,14 +60,14 @@ impl WorldUpdater {
     input: Rc<RefCell<dyn WorldUpdaterInput>>,
     world: Rc<RefCell<World>>,
   ) -> Self {
-    let world_input_upcast_adapter =
+    let world_updater_input_adapter =
       Rc::new(RefCell::new(WorldUpdaterInputAdapter::new(input)));
     let world: Ref<World> = world.borrow();
     let cells = world.cells.clone();
     let clock = world.clock.clone();
     let cells_updater =
-      CellsUpdater::new(cells, world_input_upcast_adapter.clone());
-    let clock_updater = ClockUpdater::new(clock, world_input_upcast_adapter);
+      CellsUpdater::new(cells, world_updater_input_adapter.clone());
+    let clock_updater = ClockUpdater::new(clock, world_updater_input_adapter);
     let updaters: [Box<dyn Updater>; 2] = [
       Box::new(clock_updater),
       Box::new(cells_updater),
