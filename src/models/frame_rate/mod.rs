@@ -1,16 +1,17 @@
 // =============================================================================
-//! - Configuration for CroftSoft Life
+//! - Frame Rate Model for CroftSoft Life
 //!
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Created: 2023-01-09
+//! - Created: 2023-02-13
 //! - Updated: 2023-02-13
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-pub struct Configuration {
-  pub update_period_millis_initial: f64,
+#[derive(Default)]
+pub struct FrameRate {
+  pub display: bool,
 }

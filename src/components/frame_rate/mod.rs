@@ -1,8 +1,8 @@
 // =============================================================================
-//! - Speed Component for CroftSoft Life
+//! - Frame Rate Component for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
 //! - Updated: 2023-02-13
@@ -21,16 +21,16 @@ use std::rc::Rc;
 use wasm_bindgen::JsCast;
 use web_sys::{Event, EventTarget, HtmlInputElement};
 
-pub struct SpeedComponent {
+pub struct FrameRateComponent {
+  event_unbounded_receiver_option: Option<UnboundedReceiver<Event>>,
   id: String,
   inputs: Rc<RefCell<Inputs>>,
-  unbounded_receiver: Option<UnboundedReceiver<Event>>,
 }
 
-impl SpeedComponent {
+impl FrameRateComponent {
   fn changed(&mut self) -> Option<Event> {
     let unbounded_receiver: &mut UnboundedReceiver<Event> =
-      self.unbounded_receiver.as_mut()?;
+      self.event_unbounded_receiver_option.as_mut()?;
     let result: Result<Option<Event>, TryRecvError> =
       unbounded_receiver.try_next();
     if let Ok(event_option) = result {
@@ -46,37 +46,37 @@ impl SpeedComponent {
     Self {
       id: String::from(id),
       inputs,
-      unbounded_receiver: None,
+      event_unbounded_receiver_option: None,
     }
   }
 }
 
-impl Component for SpeedComponent {
+impl Component for FrameRateComponent {
   fn make_html(&self) -> String {
     format!(
-      "Speed <input id=\"{}\" min=\"1\" max=\"60\" type=\"range\" value=\"1\">",
+      "Display update rate <input id=\"{}\" type=\"checkbox\">",
       self.id
     )
   }
 }
 
-impl Initializer for SpeedComponent {
+impl Initializer for FrameRateComponent {
   fn initialize(&mut self) {
-    self.unbounded_receiver = add_change_handler_by_id(&self.id);
+    self.event_unbounded_receiver_option = add_change_handler_by_id(&self.id);
   }
 }
 
-impl Updater for SpeedComponent {
+impl Updater for FrameRateComponent {
   fn update(&mut self) {
-    if let Some(event) = self.changed() {
+    let event_option = self.changed();
+    if let Some(event) = event_option {
       let event_target_option: Option<EventTarget> = event.target();
       if let Some(event_target) = event_target_option {
         let result: Result<HtmlInputElement, EventTarget> =
           event_target.dyn_into::<HtmlInputElement>();
         let html_input_element: HtmlInputElement = result.unwrap();
-        let value: String = html_input_element.value();
-        let v: Result<usize, _> = value.parse();
-        self.inputs.borrow_mut().speed_change_requested = Some(v.unwrap());
+        self.inputs.borrow_mut().frame_rate_display_change_requested =
+          Some(html_input_element.checked());
       }
     }
   }

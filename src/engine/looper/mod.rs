@@ -4,32 +4,33 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-24
-//! - Since: 2023-01-09
+//! - Created: 2023-01-09
+//! - Updated: 2023-02-13
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 use super::configuration::Configuration;
+use super::frame_rater::FrameRater;
 use super::functions::web_sys::LoopUpdater;
-use super::input::Input;
 use crate::components::life::LifeComponent;
-use crate::constants::{CONFIGURATION, FRAME_PERIOD_MILLIS_MINIMUM};
+use crate::constants::CONFIGURATION;
 use crate::engine::functions::web_sys::spawn_local_loop;
+use crate::messages::events::Events;
+use crate::messages::inputs::Inputs;
+use crate::models::frame_rate::FrameRate;
 use crate::models::world::World;
-use crate::updaters::world::WorldUpdater;
+use crate::updaters::world::{WorldUpdater, WorldUpdaterConfiguration};
 use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
 use std::rc::Rc;
 
 // TODO: rename this
 pub struct Looper {
-  configuration: Configuration,
-  frame_period_millis: f64,
-  input: Rc<RefCell<Input>>,
+  events: Rc<RefCell<Events>>,
+  inputs: Rc<RefCell<Inputs>>,
   life_component: LifeComponent,
-  next_update_time: f64,
   world_updater: WorldUpdater,
 }
 
@@ -42,30 +43,37 @@ impl Looper {
 
   pub fn new(configuration: Configuration) -> Self {
     let Configuration {
-      frame_period_millis,
+      update_period_millis_initial,
     } = configuration;
-    let input = Rc::new(RefCell::new(Input::default()));
+    let world_updater_configuration = WorldUpdaterConfiguration {
+      update_period_millis_initial,
+    };
+    let frame_rate = Rc::new(RefCell::new(FrameRate::default()));
+    let frame_rater =
+      Rc::new(RefCell::new(FrameRater::new(update_period_millis_initial)));
+    let events = Rc::new(RefCell::new(Events::default()));
+    let inputs = Rc::new(RefCell::new(Inputs::default()));
     let world = Rc::new(RefCell::new(World::default()));
-    let world_updater = WorldUpdater::new(input.clone(), world.clone());
-    let life_component = LifeComponent::new("life", input.clone(), world);
+    let life_component = LifeComponent::new(
+      events.clone(),
+      frame_rate.clone(),
+      "life",
+      inputs.clone(),
+      world.clone(),
+    );
+    let world_updater = WorldUpdater::new(
+      world_updater_configuration,
+      events.clone(),
+      frame_rate,
+      frame_rater,
+      inputs.clone(),
+      world,
+    );
     Self {
-      configuration,
-      input,
-      frame_period_millis,
+      events,
+      inputs,
       life_component,
-      next_update_time: 0.0,
       world_updater,
-    }
-  }
-
-  fn update_frame_rate(&mut self) {
-    if !self.input.borrow().speed_toggle_requested {
-      return;
-    }
-    if self.frame_period_millis == FRAME_PERIOD_MILLIS_MINIMUM {
-      self.frame_period_millis = self.configuration.frame_period_millis;
-    } else {
-      self.frame_period_millis = FRAME_PERIOD_MILLIS_MINIMUM;
     }
   }
 }
@@ -79,23 +87,20 @@ impl Default for Looper {
 impl Initializer for Looper {
   fn initialize(&mut self) {
     self.life_component.initialize();
-    self.input.borrow_mut().reset_requested = true;
+    self.inputs.borrow_mut().reset_requested = true;
   }
 }
 
 impl LoopUpdater for Looper {
   fn update_loop(
     &mut self,
-    update_time: f64,
+    update_time_millis: f64,
   ) {
-    if update_time < self.next_update_time {
-      return;
-    }
+    self.inputs.borrow_mut().update_time_millis = update_time_millis;
     self.life_component.update();
     self.world_updater.update();
     self.life_component.paint();
-    self.update_frame_rate();
-    self.next_update_time = update_time + self.frame_period_millis;
-    self.input.borrow_mut().clear();
+    self.events.borrow_mut().clear();
+    self.inputs.borrow_mut().clear();
   }
 }

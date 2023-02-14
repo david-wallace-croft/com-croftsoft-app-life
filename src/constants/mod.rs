@@ -4,16 +4,9 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2023-01-31
-//! - Rust since: 2023-01-09
-//! - Java version: 2008-11-05
-//! - Java since: 2008-11-04
+//! - Created: 2023-01-09
+//! - Updated: 2023-02-13
 //!
-//! # History
-//! - Adapted from the Java package com.croftsoft.apps.life
-//!   - In the Java-based [`CroftSoft Apps Library`]
-//!
-//! [`CroftSoft Apps Library`]: https://www.croftsoft.com/library/code/
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
@@ -26,11 +19,13 @@ pub static INFO: &str =
 pub const CELL_COUNT: usize = SPACE_HEIGHT * SPACE_WIDTH;
 pub const CELL_PAINT_OFFSET: f64 = (1. - CELL_PAINT_SIZE) / 2.;
 pub const CELL_PAINT_SIZE: f64 = 2. / 3.;
-pub const FRAME_PERIOD_MILLIS_MINIMUM: f64 = 10.0;
-pub const FRAMES_PER_SECOND: f64 = 1.0;
+pub const MILLIS_PER_SECOND: f64 = 1_000.;
+pub const OVERLAY_REFRESH_PERIOD_MILLIS: f64 = 1_000.;
 pub const SPACE_HEIGHT: usize = 100;
 pub const SPACE_WIDTH: usize = 100;
+pub const UPDATES_PER_SECOND: f64 = 1.;
+pub const UPDATE_PERIOD_MILLIS: f64 = MILLIS_PER_SECOND / UPDATES_PER_SECOND;
 
 pub const CONFIGURATION: Configuration = Configuration {
-  frame_period_millis: 1_000.0 / FRAMES_PER_SECOND,
+  update_period_millis_initial: UPDATE_PERIOD_MILLIS,
 };

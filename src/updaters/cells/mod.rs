@@ -4,8 +4,8 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-24
-//! - Since: 2023-01-24
+//! - Created: 2023-01-24
+//! - Updated: 2023-02-13
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -22,14 +22,14 @@ use std::rc::Rc;
 // TODO: Should I be using the js_sys random?
 use rand::{rngs::ThreadRng, Rng};
 
-pub trait CellsUpdaterInput {
+pub trait CellsUpdaterInputs {
   fn get_cell_toggle_requested(&self) -> Option<usize>;
   fn get_reset_requested(&self) -> bool;
 }
 
 pub struct CellsUpdater {
   cells: Rc<RefCell<Cells>>,
-  input: Rc<RefCell<dyn CellsUpdaterInput>>,
+  input: Rc<RefCell<dyn CellsUpdaterInputs>>,
 }
 
 impl CellsUpdater {
@@ -81,7 +81,7 @@ impl CellsUpdater {
 
   pub fn new(
     cells: Rc<RefCell<Cells>>,
-    input: Rc<RefCell<dyn CellsUpdaterInput>>,
+    input: Rc<RefCell<dyn CellsUpdaterInputs>>,
   ) -> Self {
     Self {
       cells,
