@@ -14,7 +14,7 @@
 use crate::engine::configuration::Configuration;
 
 pub static INFO: &str =
-  "CroftSoft Life v0.3.0 Copyright 2023 CroftSoft Inc";
+  "CroftSoft Life v0.3.1-SNAPSHOT Copyright 2023 CroftSoft Inc";
 
 pub const CELL_COUNT: usize = SPACE_HEIGHT * SPACE_WIDTH;
 pub const CELL_PAINT_OFFSET: f64 = (1. - CELL_PAINT_SIZE) / 2.;
