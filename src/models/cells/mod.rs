@@ -4,8 +4,8 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2023-01-24
-//! - Since: 2023-01-10
+//! - Created: 2023-01-10
+//! - Updated: 2023-02-13
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -15,8 +15,8 @@ use crate::constants::CELL_COUNT;
 use core::mem::swap;
 
 pub struct Cells {
-  pub new: [bool; CELL_COUNT],
-  pub old: [bool; CELL_COUNT],
+  pub new: Box<[bool; CELL_COUNT]>,
+  pub old: Box<[bool; CELL_COUNT]>,
 }
 
 impl Cells {
@@ -28,8 +28,8 @@ impl Cells {
 impl Default for Cells {
   fn default() -> Self {
     Self {
-      new: [false; CELL_COUNT],
-      old: [false; CELL_COUNT],
+      new: Box::new([false; CELL_COUNT]),
+      old: Box::new([false; CELL_COUNT]),
     }
   }
 }
