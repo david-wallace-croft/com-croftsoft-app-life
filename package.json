@@ -1,6 +1,6 @@
 {
   "name": "com-croftsoft-app-life",
-  "version": "0.2.3-SNAPSHOT",
+  "version": "0.3.0",
   "author": "David Wallace Croft <david@CroftSoft.com>",
   "description": "Conway's Game of Life",
   "scripts": {
