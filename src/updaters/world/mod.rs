@@ -186,6 +186,7 @@ impl Updater for WorldUpdater {
     {
       let inputs: Ref<dyn WorldUpdaterInputs> = self.inputs.borrow();
       if self.update_timer_world.before_next_update_time(update_time_millis)
+        && inputs.get_cell_toggle_requested().is_none()
         && inputs.get_frame_rate_display_change_requested().is_none()
         && !inputs.get_reset_requested()
       {
