@@ -115,7 +115,7 @@ impl Initializer for LifeComponent {
 
 impl Painter for LifeComponent {
   fn paint(&self) {
-    if !self.events.borrow().updated_world {
+    if !self.events.borrow().updated {
       return;
     }
     self.canvas_component.borrow().paint();

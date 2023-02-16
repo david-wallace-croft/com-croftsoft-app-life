@@ -22,14 +22,20 @@ use std::rc::Rc;
 // TODO: Should I be using the js_sys random?
 use rand::{rngs::ThreadRng, Rng};
 
+pub trait CellsUpdaterEvents {
+  fn set_updated(&mut self);
+}
+
 pub trait CellsUpdaterInputs {
   fn get_cell_toggle_requested(&self) -> Option<usize>;
   fn get_reset_requested(&self) -> bool;
+  fn get_time_to_update(&self) -> bool;
 }
 
 pub struct CellsUpdater {
   cells: Rc<RefCell<Cells>>,
-  input: Rc<RefCell<dyn CellsUpdaterInputs>>,
+  events: Rc<RefCell<dyn CellsUpdaterEvents>>,
+  inputs: Rc<RefCell<dyn CellsUpdaterInputs>>,
 }
 
 impl CellsUpdater {
@@ -81,11 +87,13 @@ impl CellsUpdater {
 
   pub fn new(
     cells: Rc<RefCell<Cells>>,
-    input: Rc<RefCell<dyn CellsUpdaterInputs>>,
+    events: Rc<RefCell<dyn CellsUpdaterEvents>>,
+    inputs: Rc<RefCell<dyn CellsUpdaterInputs>>,
   ) -> Self {
     Self {
       cells,
-      input,
+      events,
+      inputs,
     }
   }
 
@@ -100,27 +108,37 @@ impl CellsUpdater {
 
 impl Updater for CellsUpdater {
   fn update(&mut self) {
-    if self.input.borrow().get_reset_requested() {
+    if self.inputs.borrow().get_reset_requested() {
       self.randomize();
+      self.events.borrow_mut().set_updated();
       return;
     }
-    self.cells.borrow_mut().swap_new_and_old();
-    for i in 0..CELL_COUNT {
-      let count = self.count_adjacent_alive(i);
-      let mut cells: RefMut<Cells> = self.cells.borrow_mut();
-      if count < 2 {
-        cells.new[i] = false;
-      } else if count == 2 {
-        cells.new[i] = cells.old[i];
-      } else if count == 3 {
-        cells.new[i] = true;
-      } else {
-        cells.new[i] = false;
+    let time_to_update: bool = self.inputs.borrow().get_time_to_update();
+    if time_to_update {
+      self.cells.borrow_mut().swap_new_and_old();
+      for i in 0..CELL_COUNT {
+        let count = self.count_adjacent_alive(i);
+        let mut cells: RefMut<Cells> = self.cells.borrow_mut();
+        if count < 2 {
+          cells.new[i] = false;
+        } else if count == 2 {
+          cells.new[i] = cells.old[i];
+        } else if count == 3 {
+          cells.new[i] = true;
+        } else {
+          cells.new[i] = false;
+        }
       }
+      self.events.borrow_mut().set_updated();
     }
-    if let Some(index) = self.input.borrow().get_cell_toggle_requested() {
+    if let Some(index) = self.inputs.borrow().get_cell_toggle_requested() {
       let mut cells: RefMut<Cells> = self.cells.borrow_mut();
-      cells.new[index] = !cells.old[index];
+      if time_to_update {
+        cells.new[index] = !cells.old[index];
+      } else {
+        cells.new[index] = !cells.new[index];
+        self.events.borrow_mut().set_updated();
+      }
     }
   }
 }

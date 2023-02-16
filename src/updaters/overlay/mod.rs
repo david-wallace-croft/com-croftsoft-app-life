@@ -17,15 +17,22 @@ use crate::engine::update_timer::UpdateTimer;
 use crate::models::clock::Clock;
 use crate::models::overlay::Overlay;
 use com_croftsoft_lib_role::Updater;
-use core::cell::{RefCell, RefMut};
+use core::cell::{Ref, RefCell, RefMut};
 use std::rc::Rc;
 
+pub trait OverlayUpdaterEvents {
+  fn set_updated(&mut self);
+}
+
 pub trait OverlayUpdaterInputs {
+  fn get_time_to_update(&self) -> bool;
+  fn get_reset_requested(&self) -> bool;
   fn get_update_time_millis(&self) -> f64;
 }
 
 pub struct OverlayUpdater {
   clock: Rc<RefCell<Clock>>,
+  events: Rc<RefCell<dyn OverlayUpdaterEvents>>,
   frame_rater: Rc<RefCell<FrameRater>>,
   inputs: Rc<RefCell<dyn OverlayUpdaterInputs>>,
   overlay: Rc<RefCell<Overlay>>,
@@ -46,6 +53,7 @@ impl OverlayUpdater {
 
   pub fn new(
     clock: Rc<RefCell<Clock>>,
+    events: Rc<RefCell<dyn OverlayUpdaterEvents>>,
     frame_rater: Rc<RefCell<FrameRater>>,
     inputs: Rc<RefCell<dyn OverlayUpdaterInputs>>,
     overlay: Rc<RefCell<Overlay>>,
@@ -56,22 +64,36 @@ impl OverlayUpdater {
     };
     Self {
       clock,
+      events,
       frame_rater,
       inputs,
       overlay,
       update_timer,
     }
   }
+
+  fn update_overlay(&self) {
+    let mut overlay: RefMut<Overlay> = self.overlay.borrow_mut();
+    overlay.clock_string = self.make_clock_string();
+    overlay.frame_rate_string = self.make_frame_rate_string();
+    self.events.borrow_mut().set_updated();
+  }
 }
 
 impl Updater for OverlayUpdater {
   fn update(&mut self) {
-    let update_time_millis = self.inputs.borrow().get_update_time_millis();
+    let inputs: Ref<dyn OverlayUpdaterInputs> = self.inputs.borrow();
+    if inputs.get_reset_requested() {
+      self.update_overlay();
+      return;
+    }
+    if !inputs.get_time_to_update() {
+      return;
+    }
+    let update_time_millis = inputs.get_update_time_millis();
     if self.update_timer.before_next_update_time(update_time_millis) {
       return;
     }
-    let mut overlay: RefMut<Overlay> = self.overlay.borrow_mut();
-    overlay.clock_string = self.make_clock_string();
-    overlay.frame_rate_string = self.make_frame_rate_string();
+    self.update_overlay();
   }
 }

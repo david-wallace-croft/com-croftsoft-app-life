@@ -16,22 +16,30 @@ use com_croftsoft_lib_role::Updater;
 use core::cell::{Ref, RefCell, RefMut};
 use std::rc::Rc;
 
+pub trait ClockUpdaterEvents {
+  fn set_updated(&mut self);
+}
+
 pub trait ClockUpdaterInputs {
   fn get_reset_requested(&self) -> bool;
+  fn get_time_to_update(&self) -> bool;
 }
 
 pub struct ClockUpdater {
   clock: Rc<RefCell<Clock>>,
+  events: Rc<RefCell<dyn ClockUpdaterEvents>>,
   input: Rc<RefCell<dyn ClockUpdaterInputs>>,
 }
 
 impl ClockUpdater {
   pub fn new(
     clock: Rc<RefCell<Clock>>,
+    events: Rc<RefCell<dyn ClockUpdaterEvents>>,
     input: Rc<RefCell<dyn ClockUpdaterInputs>>,
   ) -> Self {
     Self {
       clock,
+      events,
       input,
     }
   }
@@ -43,8 +51,13 @@ impl Updater for ClockUpdater {
     let input: Ref<dyn ClockUpdaterInputs> = self.input.borrow();
     if input.get_reset_requested() {
       clock.time = 0;
-    } else {
-      clock.time = clock.time.saturating_add(1);
+      self.events.borrow_mut().set_updated();
+      return;
     }
+    if !input.get_time_to_update() {
+      return;
+    }
+    clock.time = clock.time.saturating_add(1);
+    self.events.borrow_mut().set_updated();
   }
 }
