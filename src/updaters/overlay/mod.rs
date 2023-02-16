@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-13
+//! - Updated: 2023-02-15
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -25,6 +25,7 @@ pub trait OverlayUpdaterEvents {
 }
 
 pub trait OverlayUpdaterInputs {
+  fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_time_to_update(&self) -> bool;
   fn get_reset_requested(&self) -> bool;
   fn get_update_time_millis(&self) -> f64;
@@ -83,7 +84,9 @@ impl OverlayUpdater {
 impl Updater for OverlayUpdater {
   fn update(&mut self) {
     let inputs: Ref<dyn OverlayUpdaterInputs> = self.inputs.borrow();
-    if inputs.get_reset_requested() {
+    if inputs.get_reset_requested()
+      || inputs.get_frame_rate_display_change_requested().is_some()
+    {
       self.update_overlay();
       return;
     }
