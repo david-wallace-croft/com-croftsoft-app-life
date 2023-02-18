@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-16
+//! - Updated: 2023-02-17
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -17,7 +17,9 @@ use super::frame_rate::{FrameRateUpdater, FrameRateUpdaterInputs};
 use super::overlay::{
   OverlayUpdater, OverlayUpdaterEvents, OverlayUpdaterInputs,
 };
-use crate::constants::MILLIS_PER_SECOND;
+use super::update_timer::{
+  UpdateTimerUpdater, UpdateTimerUpdaterEvents, UpdateTimerUpdaterInputs,
+};
 use crate::engine::frame_rater::FrameRater;
 use crate::engine::update_timer::UpdateTimer;
 use crate::models::frame_rate::FrameRate;
@@ -70,6 +72,22 @@ impl ClockUpdaterEvents for WorldUpdaterEventsAdapter {
 impl OverlayUpdaterEvents for WorldUpdaterEventsAdapter {
   fn set_updated(&mut self) {
     self.events.borrow_mut().set_updated();
+  }
+}
+
+impl UpdateTimerUpdaterEvents for WorldUpdaterEventsAdapter {
+  fn set_time_to_update(&mut self) {
+    self.events.borrow_mut().set_time_to_update();
+  }
+
+  fn set_update_period_millis_changed(
+    &mut self,
+    update_period_millis: f64,
+  ) {
+    self
+      .events
+      .borrow_mut()
+      .set_update_period_millis_changed(update_period_millis);
   }
 }
 
@@ -162,11 +180,22 @@ impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
+impl UpdateTimerUpdaterInputs for WorldUpdaterInputsAdapter {
+  fn get_reset_requested(&self) -> bool {
+    self.inputs.borrow().get_reset_requested()
+  }
+
+  fn get_speed_change_requested(&self) -> Option<usize> {
+    self.inputs.borrow().get_speed_change_requested()
+  }
+
+  fn get_update_time_millis(&self) -> f64 {
+    self.inputs.borrow().get_update_time_millis()
+  }
+}
+
 pub struct WorldUpdater {
-  child_updaters: [Box<dyn Updater>; 4],
-  events: Rc<RefCell<dyn WorldUpdaterEvents>>,
-  inputs: Rc<RefCell<dyn WorldUpdaterInputs>>,
-  update_timer: UpdateTimer,
+  child_updaters: [Box<dyn Updater>; 5],
 }
 
 impl WorldUpdater {
@@ -178,10 +207,6 @@ impl WorldUpdater {
     inputs: Rc<RefCell<dyn WorldUpdaterInputs>>,
     world: Rc<RefCell<World>>,
   ) -> Self {
-    let update_timer = UpdateTimer {
-      update_period_millis: configuration.update_period_millis_initial,
-      update_time_millis_next: 0.,
-    };
     let world_updater_events_adapter =
       Rc::new(RefCell::new(WorldUpdaterEventsAdapter::new(events.clone())));
     let world_updater_inputs_adapter = Rc::new(RefCell::new(
@@ -208,12 +233,22 @@ impl WorldUpdater {
     );
     let overlay_updater = OverlayUpdater::new(
       clock,
-      world_updater_events_adapter,
+      world_updater_events_adapter.clone(),
       frame_rater,
-      world_updater_inputs_adapter,
+      world_updater_inputs_adapter.clone(),
       overlay,
     );
-    let child_updaters: [Box<dyn Updater>; 4] = [
+    let update_timer = UpdateTimer {
+      update_period_millis: configuration.update_period_millis_initial,
+      update_time_millis_next: 0.,
+    };
+    let update_timer_updater = UpdateTimerUpdater::new(
+      world_updater_events_adapter,
+      world_updater_inputs_adapter,
+      update_timer,
+    );
+    let child_updaters: [Box<dyn Updater>; 5] = [
+      Box::new(update_timer_updater),
       Box::new(clock_updater),
       Box::new(cells_updater),
       Box::new(overlay_updater),
@@ -221,36 +256,12 @@ impl WorldUpdater {
     ];
     Self {
       child_updaters,
-      events,
-      inputs,
-      update_timer,
-    }
-  }
-
-  fn update_update_timer(&mut self) {
-    let inputs: Ref<dyn WorldUpdaterInputs> = self.inputs.borrow();
-    if let Some(speed) = inputs.get_speed_change_requested() {
-      self.update_timer.update_period_millis =
-        (MILLIS_PER_SECOND / speed as f64).trunc();
-      self.events.borrow_mut().set_update_period_millis_changed(
-        self.update_timer.update_period_millis,
-      );
-      self.update_timer.update_time_millis_next = 0.;
-    }
-    let update_time_millis = self.inputs.borrow().get_update_time_millis();
-    if inputs.get_reset_requested() {
-      self.update_timer.update_time_millis_next =
-        update_time_millis + self.update_timer.update_period_millis;
-    }
-    if !self.update_timer.before_next_update_time(update_time_millis) {
-      self.events.borrow_mut().set_time_to_update();
     }
   }
 }
 
 impl Updater for WorldUpdater {
   fn update(&mut self) {
-    self.update_update_timer();
     self.child_updaters.iter_mut().for_each(|updater| updater.update());
   }
 }
