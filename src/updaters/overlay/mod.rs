@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-15
+//! - Updated: 2023-02-17
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -13,7 +13,7 @@
 
 use crate::constants::OVERLAY_REFRESH_PERIOD_MILLIS;
 use crate::engine::frame_rater::FrameRater;
-use crate::engine::update_timer::UpdateTimer;
+use crate::engine::metronome::Metronome;
 use crate::models::clock::Clock;
 use crate::models::overlay::Overlay;
 use com_croftsoft_lib_role::Updater;
@@ -36,8 +36,8 @@ pub struct OverlayUpdater {
   events: Rc<RefCell<dyn OverlayUpdaterEvents>>,
   frame_rater: Rc<RefCell<FrameRater>>,
   inputs: Rc<RefCell<dyn OverlayUpdaterInputs>>,
+  metronome: Metronome,
   overlay: Rc<RefCell<Overlay>>,
-  update_timer: UpdateTimer,
 }
 
 impl OverlayUpdater {
@@ -59,17 +59,17 @@ impl OverlayUpdater {
     inputs: Rc<RefCell<dyn OverlayUpdaterInputs>>,
     overlay: Rc<RefCell<Overlay>>,
   ) -> Self {
-    let update_timer = UpdateTimer {
-      update_period_millis: OVERLAY_REFRESH_PERIOD_MILLIS,
-      update_time_millis_next: 0.,
+    let metronome = Metronome {
+      period_millis: OVERLAY_REFRESH_PERIOD_MILLIS,
+      time_millis_next: 0.,
     };
     Self {
       clock,
       events,
       frame_rater,
       inputs,
+      metronome,
       overlay,
-      update_timer,
     }
   }
 
@@ -94,9 +94,8 @@ impl Updater for OverlayUpdater {
       return;
     }
     let update_time_millis = inputs.get_update_time_millis();
-    if self.update_timer.before_next_update_time(update_time_millis) {
-      return;
+    if self.metronome.tick(update_time_millis) {
+      self.update_overlay();
     }
-    self.update_overlay();
   }
 }

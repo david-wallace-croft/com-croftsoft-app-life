@@ -14,14 +14,14 @@
 use super::cells::{CellsUpdater, CellsUpdaterEvents, CellsUpdaterInputs};
 use super::clock::{ClockUpdater, ClockUpdaterEvents, ClockUpdaterInputs};
 use super::frame_rate::{FrameRateUpdater, FrameRateUpdaterInputs};
+use super::metronome::{
+  MetronomeUpdater, MetronomeUpdaterEvents, MetronomeUpdaterInputs,
+};
 use super::overlay::{
   OverlayUpdater, OverlayUpdaterEvents, OverlayUpdaterInputs,
 };
-use super::update_timer::{
-  UpdateTimerUpdater, UpdateTimerUpdaterEvents, UpdateTimerUpdaterInputs,
-};
 use crate::engine::frame_rater::FrameRater;
-use crate::engine::update_timer::UpdateTimer;
+use crate::engine::metronome::Metronome;
 use crate::models::frame_rate::FrameRate;
 use crate::models::overlay::Overlay;
 use crate::models::world::World;
@@ -69,18 +69,8 @@ impl ClockUpdaterEvents for WorldUpdaterEventsAdapter {
   }
 }
 
-impl OverlayUpdaterEvents for WorldUpdaterEventsAdapter {
-  fn set_updated(&mut self) {
-    self.events.borrow_mut().set_updated();
-  }
-}
-
-impl UpdateTimerUpdaterEvents for WorldUpdaterEventsAdapter {
-  fn set_time_to_update(&mut self) {
-    self.events.borrow_mut().set_time_to_update();
-  }
-
-  fn set_update_period_millis_changed(
+impl MetronomeUpdaterEvents for WorldUpdaterEventsAdapter {
+  fn set_period_millis_changed(
     &mut self,
     update_period_millis: f64,
   ) {
@@ -89,13 +79,23 @@ impl UpdateTimerUpdaterEvents for WorldUpdaterEventsAdapter {
       .borrow_mut()
       .set_update_period_millis_changed(update_period_millis);
   }
+
+  fn set_tick(&mut self) {
+    self.events.borrow_mut().set_time_to_update();
+  }
+}
+
+impl OverlayUpdaterEvents for WorldUpdaterEventsAdapter {
+  fn set_updated(&mut self) {
+    self.events.borrow_mut().set_updated();
+  }
 }
 
 pub trait WorldUpdaterInputs {
   fn get_cell_toggle_requested(&self) -> Option<usize>;
+  fn get_frequency_change_requested(&self) -> Option<f64>;
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_reset_requested(&self) -> bool;
-  fn get_speed_change_requested(&self) -> Option<usize>;
   fn get_update_time_millis(&self) -> f64;
 }
 
@@ -162,6 +162,20 @@ impl FrameRateUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
+impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
+  fn get_frequency_change_requested(&self) -> Option<f64> {
+    self.inputs.borrow().get_frequency_change_requested()
+  }
+
+  fn get_reset_requested(&self) -> bool {
+    self.inputs.borrow().get_reset_requested()
+  }
+
+  fn get_time_millis(&self) -> f64 {
+    self.inputs.borrow().get_update_time_millis()
+  }
+}
+
 impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
     self.inputs.borrow().get_frame_rate_display_change_requested()
@@ -173,20 +187,6 @@ impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
 
   fn get_time_to_update(&self) -> bool {
     self.events.borrow().get_time_to_update()
-  }
-
-  fn get_update_time_millis(&self) -> f64 {
-    self.inputs.borrow().get_update_time_millis()
-  }
-}
-
-impl UpdateTimerUpdaterInputs for WorldUpdaterInputsAdapter {
-  fn get_reset_requested(&self) -> bool {
-    self.inputs.borrow().get_reset_requested()
-  }
-
-  fn get_speed_change_requested(&self) -> Option<usize> {
-    self.inputs.borrow().get_speed_change_requested()
   }
 
   fn get_update_time_millis(&self) -> f64 {
@@ -238,17 +238,17 @@ impl WorldUpdater {
       world_updater_inputs_adapter.clone(),
       overlay,
     );
-    let update_timer = UpdateTimer {
-      update_period_millis: configuration.update_period_millis_initial,
-      update_time_millis_next: 0.,
+    let metronome = Metronome {
+      period_millis: configuration.update_period_millis_initial,
+      time_millis_next: 0.,
     };
-    let update_timer_updater = UpdateTimerUpdater::new(
+    let metronome_updater = MetronomeUpdater::new(
       world_updater_events_adapter,
       world_updater_inputs_adapter,
-      update_timer,
+      metronome,
     );
     let child_updaters: [Box<dyn Updater>; 5] = [
-      Box::new(update_timer_updater),
+      Box::new(metronome_updater),
       Box::new(clock_updater),
       Box::new(cells_updater),
       Box::new(overlay_updater),

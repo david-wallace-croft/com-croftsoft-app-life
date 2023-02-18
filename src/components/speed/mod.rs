@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-13
+//! - Updated: 2023-02-17
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -76,7 +76,8 @@ impl Updater for SpeedComponent {
         let html_input_element: HtmlInputElement = result.unwrap();
         let value: String = html_input_element.value();
         let v: Result<usize, _> = value.parse();
-        self.inputs.borrow_mut().speed_change_requested = Some(v.unwrap());
+        self.inputs.borrow_mut().frequency_change_requested =
+          Some(v.unwrap() as f64);
       }
     }
   }
