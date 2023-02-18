@@ -21,7 +21,7 @@ use super::overlay::{
   OverlayUpdater, OverlayUpdaterEvents, OverlayUpdaterInputs,
 };
 use crate::engine::frame_rater::FrameRater;
-use crate::engine::metronome::Metronome;
+use crate::engine::metronome::SimpleMetronome;
 use crate::models::frame_rate::FrameRate;
 use crate::models::overlay::Overlay;
 use crate::models::world::World;
@@ -238,10 +238,10 @@ impl WorldUpdater {
       world_updater_inputs_adapter.clone(),
       overlay,
     );
-    let metronome = Metronome {
+    let metronome = Rc::new(RefCell::new(SimpleMetronome {
       period_millis: configuration.update_period_millis_initial,
-      time_millis_next: 0.,
-    };
+      time_millis_next_tick: 0.,
+    }));
     let metronome_updater = MetronomeUpdater::new(
       world_updater_events_adapter,
       world_updater_inputs_adapter,
