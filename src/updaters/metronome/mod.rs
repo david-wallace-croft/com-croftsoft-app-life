@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-17
-//! - Updated: 2023-02-18
+//! - Updated: 2023-02-19
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -23,17 +23,16 @@ const MILLIS_PER_SECOND: f64 = 1_000.;
 pub trait MetronomeUpdaterEvents {
   fn set_period_millis_changed(
     &mut self,
-    update_period_millis: f64,
+    period_millis: f64,
   );
   fn set_tick(&mut self);
 }
 
 pub trait MetronomeUpdaterInputs {
+  fn get_current_time_millis(&self) -> f64;
   // TODO: Change this to get_period_millis_change_requested()
   fn get_frequency_change_requested(&self) -> Option<f64>;
   fn get_reset_requested(&self) -> bool;
-  // TODO: Change this to get_current_time_millis()
-  fn get_time_millis(&self) -> f64;
 }
 
 pub struct MetronomeUpdater {
@@ -66,11 +65,11 @@ impl Updater for MetronomeUpdater {
       self.events.borrow_mut().set_period_millis_changed(period_millis);
       metronome.set_time_millis_next_tick(0.);
     }
-    let time_millis = self.inputs.borrow().get_time_millis();
+    let current_time_millis = self.inputs.borrow().get_current_time_millis();
     if inputs.get_reset_requested() {
-      self.metronome.borrow_mut().reset(time_millis);
+      self.metronome.borrow_mut().reset(current_time_millis);
     }
-    if self.metronome.borrow_mut().tick(time_millis) {
+    if self.metronome.borrow_mut().tick(current_time_millis) {
       self.events.borrow_mut().set_tick();
     }
   }

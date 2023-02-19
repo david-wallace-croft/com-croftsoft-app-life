@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-17
+//! - Updated: 2023-02-19
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -163,16 +163,16 @@ impl FrameRateUpdaterInputs for WorldUpdaterInputsAdapter {
 }
 
 impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
+  fn get_current_time_millis(&self) -> f64 {
+    self.inputs.borrow().get_update_time_millis()
+  }
+
   fn get_frequency_change_requested(&self) -> Option<f64> {
     self.inputs.borrow().get_frequency_change_requested()
   }
 
   fn get_reset_requested(&self) -> bool {
     self.inputs.borrow().get_reset_requested()
-  }
-
-  fn get_time_millis(&self) -> f64 {
-    self.inputs.borrow().get_update_time_millis()
   }
 }
 
