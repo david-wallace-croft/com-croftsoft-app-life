@@ -5,13 +5,13 @@
 //! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-17
+//! - Updated: 2023-02-20
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use crate::engine::functions::web_sys::add_change_handler_by_id;
+use crate::{engine::functions::web_sys::add_change_handler_by_id, constants::MILLIS_PER_SECOND};
 use crate::engine::traits::Component;
 use crate::messages::inputs::Inputs;
 use com_croftsoft_lib_role::{Initializer, Updater};
@@ -76,8 +76,9 @@ impl Updater for SpeedComponent {
         let html_input_element: HtmlInputElement = result.unwrap();
         let value: String = html_input_element.value();
         let v: Result<usize, _> = value.parse();
-        self.inputs.borrow_mut().frequency_change_requested =
-          Some(v.unwrap() as f64);
+        let frequency: f64 = v.unwrap() as f64;
+        let period_millis: f64 = (MILLIS_PER_SECOND / frequency).trunc();
+        self.inputs.borrow_mut().period_millis_change_requested = Some(period_millis);
       }
     }
   }

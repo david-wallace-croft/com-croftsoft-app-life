@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-19
+//! - Updated: 2023-02-20
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -93,7 +93,7 @@ impl OverlayUpdaterEvents for WorldUpdaterEventsAdapter {
 
 pub trait WorldUpdaterInputs {
   fn get_cell_toggle_requested(&self) -> Option<usize>;
-  fn get_frequency_change_requested(&self) -> Option<f64>;
+  fn get_period_millis_change_requested(&self) -> Option<f64>;
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_reset_requested(&self) -> bool;
   fn get_update_time_millis(&self) -> f64;
@@ -167,8 +167,8 @@ impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
     self.inputs.borrow().get_update_time_millis()
   }
 
-  fn get_frequency_change_requested(&self) -> Option<f64> {
-    self.inputs.borrow().get_frequency_change_requested()
+  fn get_period_millis_change_requested(&self) -> Option<f64> {
+    self.inputs.borrow().get_period_millis_change_requested()
   }
 
   fn get_reset_requested(&self) -> bool {
