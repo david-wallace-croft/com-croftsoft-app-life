@@ -14,14 +14,12 @@
 use super::cells::{CellsUpdater, CellsUpdaterEvents, CellsUpdaterInputs};
 use super::clock::{ClockUpdater, ClockUpdaterEvents, ClockUpdaterInputs};
 use super::frame_rate::{FrameRateUpdater, FrameRateUpdaterInputs};
-use super::metronome::{
-  MetronomeUpdater, MetronomeUpdaterEvents, MetronomeUpdaterInputs,
-};
 use super::overlay::{
   OverlayUpdater, OverlayUpdaterEvents, OverlayUpdaterInputs,
 };
 use crate::engine::frame_rater::FrameRater;
-use crate::engine::metronome::SimpleMetronome;
+use crate::engine::metronome::simple::SimpleMetronome;
+use crate::engine::metronome::updater::{MetronomeUpdaterEvents, MetronomeUpdaterInputs, MetronomeUpdater};
 use crate::models::frame_rate::FrameRate;
 use crate::models::overlay::Overlay;
 use crate::models::world::World;

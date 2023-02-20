@@ -5,15 +5,15 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-18
+//! - Updated: 2023-02-20
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use crate::constants::OVERLAY_REFRESH_PERIOD_MILLIS;
+use crate::engine::metronome::Metronome;
+use crate::{constants::OVERLAY_REFRESH_PERIOD_MILLIS, engine::metronome::simple::SimpleMetronome};
 use crate::engine::frame_rater::FrameRater;
-use crate::engine::metronome::{Metronome, SimpleMetronome};
 use crate::models::clock::Clock;
 use crate::models::overlay::Overlay;
 use com_croftsoft_lib_role::Updater;

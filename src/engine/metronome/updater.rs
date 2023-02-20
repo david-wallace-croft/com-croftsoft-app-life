@@ -11,12 +11,10 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-// TODO: Move this file to the engine module
-
-use crate::engine::metronome::Metronome;
 use com_croftsoft_lib_role::Updater;
 use core::cell::{Ref, RefCell, RefMut};
 use std::rc::Rc;
+use super::Metronome;
 
 pub trait MetronomeUpdaterEvents {
   fn set_period_millis_changed(
