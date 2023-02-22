@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-20
+//! - Updated: 2023-02-21
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -18,11 +18,13 @@ use super::overlay::{
   OverlayUpdater, OverlayUpdaterEvents, OverlayUpdaterInputs,
 };
 use crate::engine::frame_rater::FrameRater;
-use crate::engine::metronome::simple::SimpleMetronome;
-use crate::engine::metronome::updater::{MetronomeUpdaterEvents, MetronomeUpdaterInputs, MetronomeUpdater};
 use crate::models::frame_rate::FrameRate;
 use crate::models::overlay::Overlay;
 use crate::models::world::World;
+use com_croftsoft_lib_animation::metronome::simple::SimpleMetronome;
+use com_croftsoft_lib_animation::metronome::updater::{
+  MetronomeUpdater, MetronomeUpdaterEvents, MetronomeUpdaterInputs,
+};
 use com_croftsoft_lib_role::Updater;
 use core::cell::{Ref, RefCell};
 use std::rc::Rc;

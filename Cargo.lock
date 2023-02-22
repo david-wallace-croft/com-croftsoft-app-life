@@ -37,6 +37,7 @@ name = "com-croftsoft-app-life"
 version = "0.3.2-SNAPSHOT"
 dependencies = [
  "anyhow",
+ "com-croftsoft-lib-animation",
  "com-croftsoft-lib-role",
  "console_error_panic_hook",
  "futures",
@@ -48,6 +49,15 @@ dependencies = [
  "wasm-bindgen-test",
  "web-sys",
  "wee_alloc",
+]
+
+[[package]]
+name = "com-croftsoft-lib-animation"
+version = "0.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c73785d68ddcb43e8e16630e700883309b0632099123838b7e1536129f072116"
+dependencies = [
+ "com-croftsoft-lib-role",
 ]
 
 [[package]]
