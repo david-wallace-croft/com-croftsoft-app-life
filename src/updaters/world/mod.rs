@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-21
+//! - Updated: 2023-02-22
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -21,7 +21,7 @@ use crate::engine::frame_rater::FrameRater;
 use crate::models::frame_rate::FrameRate;
 use crate::models::overlay::Overlay;
 use crate::models::world::World;
-use com_croftsoft_lib_animation::metronome::simple::SimpleMetronome;
+use com_croftsoft_lib_animation::metronome::delta::DeltaMetronome;
 use com_croftsoft_lib_animation::metronome::updater::{
   MetronomeUpdater, MetronomeUpdaterEvents, MetronomeUpdaterInputs,
 };
@@ -238,7 +238,7 @@ impl WorldUpdater {
       world_updater_inputs_adapter.clone(),
       overlay,
     );
-    let metronome = Rc::new(RefCell::new(SimpleMetronome {
+    let metronome = Rc::new(RefCell::new(DeltaMetronome {
       period_millis: configuration.update_period_millis_initial,
       time_millis_next_tick: 0.,
     }));

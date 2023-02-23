@@ -19,7 +19,7 @@ repository = "https://github.com/david-wallace-croft/com-croftsoft-app-life"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-com-croftsoft-lib-animation = "0.0.0"
+com-croftsoft-lib-animation = "0.0.1"
 com-croftsoft-lib-role = "0.1.4"
 console_error_panic_hook = "0.1.7"
 js-sys = "0.3.60"
