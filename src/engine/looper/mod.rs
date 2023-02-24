@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-02-13
+//! - Updated: 2023-02-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -19,7 +19,7 @@ use crate::constants::CONFIGURATION;
 use crate::engine::functions::web_sys::spawn_local_loop;
 use crate::messages::events::Events;
 use crate::messages::inputs::Inputs;
-use crate::models::frame_rate::FrameRate;
+use crate::models::options::Options;
 use crate::models::world::World;
 use crate::updaters::world::{WorldUpdater, WorldUpdaterConfiguration};
 use com_croftsoft_lib_role::{Initializer, Painter, Updater};
@@ -48,25 +48,25 @@ impl Looper {
     let world_updater_configuration = WorldUpdaterConfiguration {
       update_period_millis_initial,
     };
-    let frame_rate = Rc::new(RefCell::new(FrameRate::default()));
     let frame_rater =
       Rc::new(RefCell::new(FrameRater::new(update_period_millis_initial)));
     let events = Rc::new(RefCell::new(Events::default()));
     let inputs = Rc::new(RefCell::new(Inputs::default()));
+    let options = Rc::new(RefCell::new(Options::default()));
     let world = Rc::new(RefCell::new(World::default()));
     let life_component = LifeComponent::new(
       events.clone(),
-      frame_rate.clone(),
       "life",
       inputs.clone(),
+      options.clone(),
       world.clone(),
     );
     let world_updater = WorldUpdater::new(
       world_updater_configuration,
       events.clone(),
-      frame_rate,
       frame_rater,
       inputs.clone(),
+      options,
       world,
     );
     Self {

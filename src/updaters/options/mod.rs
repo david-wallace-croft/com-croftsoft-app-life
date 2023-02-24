@@ -4,52 +4,53 @@
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Created: 2023-02-13
-//! - Updated: 2023-02-15
+//! - Created: 2023-02-23
+//! - Updated: 2023-02-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 use crate::engine::frame_rater::FrameRater;
-use crate::models::frame_rate::FrameRate;
+use crate::models::options::Options;
 use com_croftsoft_lib_role::Updater;
 use core::cell::{Ref, RefCell};
 use std::rc::Rc;
 
-pub trait FrameRateUpdaterInputs {
+pub trait OptionsUpdaterInputs {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
+  fn get_pause_change_requested(&self) -> Option<bool>;
   fn get_reset_requested(&self) -> bool;
   fn get_time_to_update(&self) -> bool;
   fn get_update_period_millis_changed(&self) -> Option<f64>;
   fn get_update_time_millis(&self) -> f64;
 }
 
-pub struct FrameRateUpdater {
-  frame_rate: Rc<RefCell<FrameRate>>,
+pub struct OptionsUpdater {
   frame_rater: Rc<RefCell<FrameRater>>,
-  inputs: Rc<RefCell<dyn FrameRateUpdaterInputs>>,
+  inputs: Rc<RefCell<dyn OptionsUpdaterInputs>>,
+  options: Rc<RefCell<Options>>,
 }
 
-impl FrameRateUpdater {
+impl OptionsUpdater {
   pub fn new(
-    frame_rate: Rc<RefCell<FrameRate>>,
     frame_rater: Rc<RefCell<FrameRater>>,
-    inputs: Rc<RefCell<dyn FrameRateUpdaterInputs>>,
+    inputs: Rc<RefCell<dyn OptionsUpdaterInputs>>,
+    options: Rc<RefCell<Options>>,
   ) -> Self {
     Self {
-      frame_rate,
       frame_rater,
       inputs,
+      options,
     }
   }
 }
 
-impl Updater for FrameRateUpdater {
+impl Updater for OptionsUpdater {
   fn update(&mut self) {
-    let inputs: Ref<dyn FrameRateUpdaterInputs> = self.inputs.borrow();
+    let inputs: Ref<dyn OptionsUpdaterInputs> = self.inputs.borrow();
     if let Some(display) = inputs.get_frame_rate_display_change_requested() {
-      self.frame_rate.borrow_mut().display = display;
+      self.options.borrow_mut().frame_rate_display = display;
       if display {
         self.frame_rater.borrow_mut().clear();
       }
@@ -62,11 +63,14 @@ impl Updater for FrameRateUpdater {
         .borrow_mut()
         .update_frame_sample_size(update_period_millis);
     }
+    if let Some(pause) = inputs.get_pause_change_requested() {
+      self.options.borrow_mut().pause = pause;
+    }
     if inputs.get_reset_requested() {
       self.frame_rater.borrow_mut().clear();
       return;
     }
-    if inputs.get_time_to_update() && self.frame_rate.borrow().display {
+    if inputs.get_time_to_update() && self.options.borrow().frame_rate_display {
       self
         .frame_rater
         .borrow_mut()

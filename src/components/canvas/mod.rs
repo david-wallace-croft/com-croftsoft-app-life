@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-02-13
+//! - Updated: 2023-02-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -18,7 +18,7 @@ use crate::engine::functions::web_sys::{
 };
 use crate::engine::traits::Component;
 use crate::messages::inputs::Inputs;
-use crate::models::frame_rate::FrameRate;
+use crate::models::options::Options;
 use crate::models::world::World;
 use crate::painters::world::WorldPainter;
 use com_croftsoft_lib_role::{Initializer, Painter, Updater};
@@ -28,9 +28,9 @@ use std::rc::Rc;
 use web_sys::{HtmlCanvasElement, MouseEvent};
 
 pub struct CanvasComponent {
-  frame_rate: Rc<RefCell<FrameRate>>,
   id: String,
   inputs: Rc<RefCell<Inputs>>,
+  options: Rc<RefCell<Options>>,
   root_painter_option: Option<WorldPainter>,
   unbounded_receiver_option: Option<UnboundedReceiver<MouseEvent>>,
   world: Rc<RefCell<World>>,
@@ -48,13 +48,13 @@ impl CanvasComponent {
   }
 
   pub fn new(
-    frame_rate: Rc<RefCell<FrameRate>>,
     id: &str,
     inputs: Rc<RefCell<Inputs>>,
+    options: Rc<RefCell<Options>>,
     world: Rc<RefCell<World>>,
   ) -> Self {
     Self {
-      frame_rate,
+      options,
       id: String::from(id),
       inputs,
       root_painter_option: None,
@@ -108,7 +108,7 @@ impl Initializer for CanvasComponent {
     self.unbounded_receiver_option = add_mouse_down_handler_by_id(&self.id);
     self.root_painter_option = Some(WorldPainter::new(
       "canvas",
-      self.frame_rate.clone(),
+      self.options.clone(),
       &self.world.borrow(),
     ));
   }

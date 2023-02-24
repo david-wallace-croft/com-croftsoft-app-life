@@ -5,20 +5,24 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-22
+//! - Updated: 2023-02-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use super::cells::{CellsUpdater, CellsUpdaterEvents, CellsUpdaterInputs};
-use super::clock::{ClockUpdater, ClockUpdaterEvents, ClockUpdaterInputs};
-use super::frame_rate::{FrameRateUpdater, FrameRateUpdaterInputs};
+use super::cells::{
+  CellsUpdater, CellsUpdaterEvents, CellsUpdaterInputs, CellsUpdaterOptions,
+};
+use super::clock::{
+  ClockUpdater, ClockUpdaterEvents, ClockUpdaterInputs, ClockUpdaterOptions,
+};
+use super::options::{OptionsUpdater, OptionsUpdaterInputs};
 use super::overlay::{
   OverlayUpdater, OverlayUpdaterEvents, OverlayUpdaterInputs,
 };
 use crate::engine::frame_rater::FrameRater;
-use crate::models::frame_rate::FrameRate;
+use crate::models::options::Options;
 use crate::models::overlay::Overlay;
 use crate::models::world::World;
 use com_croftsoft_lib_animation::metronome::delta::DeltaMetronome;
@@ -93,6 +97,7 @@ impl OverlayUpdaterEvents for WorldUpdaterEventsAdapter {
 
 pub trait WorldUpdaterInputs {
   fn get_cell_toggle_requested(&self) -> Option<usize>;
+  fn get_pause_change_requested(&self) -> Option<bool>;
   fn get_period_millis_change_requested(&self) -> Option<f64>;
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_reset_requested(&self) -> bool;
@@ -140,9 +145,13 @@ impl ClockUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
-impl FrameRateUpdaterInputs for WorldUpdaterInputsAdapter {
+impl OptionsUpdaterInputs for WorldUpdaterInputsAdapter {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
     self.inputs.borrow().get_frame_rate_display_change_requested()
+  }
+
+  fn get_pause_change_requested(&self) -> Option<bool> {
+    self.inputs.borrow().get_pause_change_requested()
   }
 
   fn get_reset_requested(&self) -> bool {
@@ -194,6 +203,34 @@ impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
+pub trait WorldUpdaterOptions {
+  fn get_pause(&self) -> bool;
+}
+
+struct WorldUpdaterOptionsAdapter {
+  options: Rc<RefCell<dyn WorldUpdaterOptions>>,
+}
+
+impl WorldUpdaterOptionsAdapter {
+  fn new(options: Rc<RefCell<dyn WorldUpdaterOptions>>) -> Self {
+    Self {
+      options,
+    }
+  }
+}
+
+impl CellsUpdaterOptions for WorldUpdaterOptionsAdapter {
+  fn get_pause(&self) -> bool {
+    self.options.borrow().get_pause()
+  }
+}
+
+impl ClockUpdaterOptions for WorldUpdaterOptionsAdapter {
+  fn get_pause(&self) -> bool {
+    self.options.borrow().get_pause()
+  }
+}
+
 pub struct WorldUpdater {
   child_updaters: [Box<dyn Updater>; 5],
 }
@@ -202,15 +239,18 @@ impl WorldUpdater {
   pub fn new(
     configuration: WorldUpdaterConfiguration,
     events: Rc<RefCell<dyn WorldUpdaterEvents>>,
-    frame_rate: Rc<RefCell<FrameRate>>,
     frame_rater: Rc<RefCell<FrameRater>>,
     inputs: Rc<RefCell<dyn WorldUpdaterInputs>>,
+    options: Rc<RefCell<Options>>,
     world: Rc<RefCell<World>>,
   ) -> Self {
     let world_updater_events_adapter =
       Rc::new(RefCell::new(WorldUpdaterEventsAdapter::new(events.clone())));
     let world_updater_inputs_adapter = Rc::new(RefCell::new(
       WorldUpdaterInputsAdapter::new(events.clone(), inputs.clone()),
+    ));
+    let world_updater_options_adapter = Rc::new(RefCell::new(
+      WorldUpdaterOptionsAdapter::new(options.clone()),
     ));
     let world: Ref<World> = world.borrow();
     let cells = world.cells.clone();
@@ -219,17 +259,19 @@ impl WorldUpdater {
       cells,
       world_updater_events_adapter.clone(),
       world_updater_inputs_adapter.clone(),
+      world_updater_options_adapter.clone(),
     );
     let clock_updater = ClockUpdater::new(
       clock.clone(),
       world_updater_events_adapter.clone(),
       world_updater_inputs_adapter.clone(),
+      world_updater_options_adapter,
     );
     let overlay: Rc<RefCell<Overlay>> = world.overlay.clone();
-    let frame_rate_updater = FrameRateUpdater::new(
-      frame_rate,
+    let frame_rate_updater = OptionsUpdater::new(
       frame_rater.clone(),
       world_updater_inputs_adapter.clone(),
+      options,
     );
     let overlay_updater = OverlayUpdater::new(
       clock,

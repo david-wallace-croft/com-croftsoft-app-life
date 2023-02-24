@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-15
+//! - Updated: 2023-02-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -25,10 +25,15 @@ pub trait ClockUpdaterInputs {
   fn get_time_to_update(&self) -> bool;
 }
 
+pub trait ClockUpdaterOptions {
+  fn get_pause(&self) -> bool;
+}
+
 pub struct ClockUpdater {
   clock: Rc<RefCell<Clock>>,
   events: Rc<RefCell<dyn ClockUpdaterEvents>>,
   input: Rc<RefCell<dyn ClockUpdaterInputs>>,
+  options: Rc<RefCell<dyn ClockUpdaterOptions>>,
 }
 
 impl ClockUpdater {
@@ -36,11 +41,13 @@ impl ClockUpdater {
     clock: Rc<RefCell<Clock>>,
     events: Rc<RefCell<dyn ClockUpdaterEvents>>,
     input: Rc<RefCell<dyn ClockUpdaterInputs>>,
+    options: Rc<RefCell<dyn ClockUpdaterOptions>>,
   ) -> Self {
     Self {
       clock,
       events,
       input,
+      options,
     }
   }
 }
@@ -54,7 +61,8 @@ impl Updater for ClockUpdater {
       self.events.borrow_mut().set_updated();
       return;
     }
-    if !input.get_time_to_update() {
+    let pause: bool = self.options.borrow().get_pause();
+    if pause || !input.get_time_to_update() {
       return;
     }
     clock.time = clock.time.saturating_add(1);

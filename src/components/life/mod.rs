@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-02-15
+//! - Updated: 2023-02-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -13,13 +13,14 @@
 
 use super::canvas::CanvasComponent;
 use super::frame_rate::FrameRateComponent;
+use super::pause::PauseComponent;
 use super::reset::ResetComponent;
 use super::speed::SpeedComponent;
 use crate::engine::functions::web_sys::get_window;
 use crate::engine::traits::Component;
 use crate::messages::events::Events;
 use crate::messages::inputs::Inputs;
-use crate::models::frame_rate::FrameRate;
+use crate::models::options::Options;
 use crate::models::world::World;
 use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
@@ -28,9 +29,10 @@ use web_sys::{Document, HtmlCollection};
 
 pub struct LifeComponent {
   canvas_component: Rc<RefCell<CanvasComponent>>,
-  components: [Rc<RefCell<dyn Component>>; 4],
+  components: [Rc<RefCell<dyn Component>>; 5],
   events: Rc<RefCell<Events>>,
   frame_rate_component: Rc<RefCell<FrameRateComponent>>,
+  pause_component: Rc<RefCell<PauseComponent>>,
   reset_component: Rc<RefCell<ResetComponent>>,
   speed_component: Rc<RefCell<SpeedComponent>>,
 }
@@ -38,29 +40,32 @@ pub struct LifeComponent {
 impl LifeComponent {
   pub fn new(
     events: Rc<RefCell<Events>>,
-    frame_rate: Rc<RefCell<FrameRate>>,
     // TODO: do something with the ID
     _id: &str,
     inputs: Rc<RefCell<Inputs>>,
+    options: Rc<RefCell<Options>>,
     world: Rc<RefCell<World>>,
   ) -> Self {
     let canvas_component = Rc::new(RefCell::new(CanvasComponent::new(
-      frame_rate,
       "canvas",
       inputs.clone(),
+      options,
       world,
     )));
     let frame_rate_component = Rc::new(RefCell::new(FrameRateComponent::new(
       "frame-rate",
       inputs.clone(),
     )));
+    let pause_component =
+      Rc::new(RefCell::new(PauseComponent::new("pause", inputs.clone())));
     let reset_component =
       Rc::new(RefCell::new(ResetComponent::new("reset", inputs.clone())));
     let speed_component =
       Rc::new(RefCell::new(SpeedComponent::new("speed", inputs)));
-    let components: [Rc<RefCell<dyn Component>>; 4] = [
+    let components: [Rc<RefCell<dyn Component>>; 5] = [
       canvas_component.clone(),
       frame_rate_component.clone(),
+      pause_component.clone(),
       reset_component.clone(),
       speed_component.clone(),
     ];
@@ -69,6 +74,7 @@ impl LifeComponent {
       components,
       events,
       frame_rate_component,
+      pause_component,
       reset_component,
       speed_component,
     }
@@ -80,6 +86,7 @@ impl Component for LifeComponent {
     let canvas_html: String = self.canvas_component.borrow().make_html();
     let frame_rate_html: String =
       self.frame_rate_component.borrow().make_html();
+    let pause_html: String = self.pause_component.borrow().make_html();
     let reset_html: String = self.reset_component.borrow().make_html();
     let speed_html: String = self.speed_component.borrow().make_html();
     // TODO: Assemble this from an HTML template
@@ -90,6 +97,7 @@ impl Component for LifeComponent {
       reset_html,
       speed_html,
       frame_rate_html,
+      pause_html,
       String::from("</div>"),
     ]
     .join("\n")
