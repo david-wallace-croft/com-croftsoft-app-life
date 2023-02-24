@@ -1,6 +1,6 @@
 [package]
 name = "com-croftsoft-app-life"
-version = "0.3.2-SNAPSHOT"
+version = "0.3.2"
 authors = ["David Wallace Croft <david@croftsoft.com>"]
 # Use the categories from https://crates.io/categories
 categories = ["games", "simulation"]
