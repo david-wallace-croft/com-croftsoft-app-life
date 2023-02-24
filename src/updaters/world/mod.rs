@@ -186,6 +186,10 @@ impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
 }
 
 impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
+  fn get_current_time_millis(&self) -> f64 {
+    self.inputs.borrow().get_update_time_millis()
+  }
+
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
     self.inputs.borrow().get_frame_rate_display_change_requested()
   }
@@ -196,10 +200,6 @@ impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
 
   fn get_time_to_update(&self) -> bool {
     self.events.borrow().get_time_to_update()
-  }
-
-  fn get_update_time_millis(&self) -> f64 {
-    self.inputs.borrow().get_update_time_millis()
   }
 }
 

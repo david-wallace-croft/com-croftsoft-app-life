@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-21
+//! - Updated: 2023-02-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -26,10 +26,10 @@ pub trait OverlayUpdaterEvents {
 }
 
 pub trait OverlayUpdaterInputs {
+  fn get_current_time_millis(&self) -> f64;
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_time_to_update(&self) -> bool;
   fn get_reset_requested(&self) -> bool;
-  fn get_update_time_millis(&self) -> f64;
 }
 
 pub struct OverlayUpdater {
@@ -94,8 +94,8 @@ impl Updater for OverlayUpdater {
     if !inputs.get_time_to_update() {
       return;
     }
-    let update_time_millis = inputs.get_update_time_millis();
-    if self.metronome.tick(update_time_millis) {
+    let current_time_millis = inputs.get_current_time_millis();
+    if self.metronome.tick(current_time_millis) {
       self.update_overlay();
     }
   }
