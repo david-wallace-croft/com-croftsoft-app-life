@@ -144,8 +144,8 @@ impl Updater for CellsUpdater {
         cells.new[index] = !cells.old[index];
       } else {
         cells.new[index] = !cells.new[index];
-        self.events.borrow_mut().set_updated();
       }
+      self.events.borrow_mut().set_updated();
     }
   }
 }
