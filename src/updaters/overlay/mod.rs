@@ -28,6 +28,7 @@ pub trait OverlayUpdaterEvents {
 pub trait OverlayUpdaterInputs {
   fn get_current_time_millis(&self) -> f64;
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
+  fn get_pause_change_requested(&self) -> Option<bool>;
   fn get_time_to_update(&self) -> bool;
   fn get_reset_requested(&self) -> bool;
 }
@@ -42,15 +43,15 @@ pub struct OverlayUpdater {
 }
 
 impl OverlayUpdater {
-  fn make_clock_string(&self) -> String {
-    format!("Time: {}", self.clock.borrow().time)
-  }
-
-  fn make_frame_rate_string(&self) -> String {
+  fn make_update_rate_string(&self) -> String {
     format!(
       "Simulation updates per second: {:.3}",
       self.frame_rater.borrow().get_frames_per_second_sampled()
     )
+  }
+
+  fn make_updates_string(&self) -> String {
+    format!("Updates: {}", self.clock.borrow().time)
   }
 
   pub fn new(
@@ -76,8 +77,8 @@ impl OverlayUpdater {
 
   fn update_overlay(&self) {
     let mut overlay: RefMut<Overlay> = self.overlay.borrow_mut();
-    overlay.clock_string = self.make_clock_string();
-    overlay.frame_rate_string = self.make_frame_rate_string();
+    overlay.clock_string = self.make_updates_string();
+    overlay.frame_rate_string = self.make_update_rate_string();
     self.events.borrow_mut().set_updated();
   }
 }
@@ -87,6 +88,7 @@ impl Updater for OverlayUpdater {
     let inputs: Ref<dyn OverlayUpdaterInputs> = self.inputs.borrow();
     if inputs.get_reset_requested()
       || inputs.get_frame_rate_display_change_requested().is_some()
+      || inputs.get_pause_change_requested().is_some()
     {
       self.update_overlay();
       return;

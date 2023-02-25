@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-10
-//! - Updated: 2023-02-23
+//! - Updated: 2023-02-24
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -48,7 +48,8 @@ impl CanvasPainter for OverlayPainter {
     context.set_font("bold 17px monospace");
     let overlay: Ref<Overlay> = self.overlay.borrow();
     context.fill_text(&overlay.clock_string, 4.0, 17.0).unwrap();
-    if self.options.borrow().frame_rate_display {
+    let options = self.options.borrow();
+    if options.frame_rate_display && !options.pause {
       context.fill_text(&overlay.frame_rate_string, 4.0, 34.0).unwrap();
     }
   }
