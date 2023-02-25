@@ -5,14 +5,13 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-02-24
+//! - Updated: 2023-02-25
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 use super::configuration::Configuration;
-use super::frame_rater::FrameRater;
 use super::functions::web_sys::LoopUpdater;
 use crate::components::life::LifeComponent;
 use crate::constants::CONFIGURATION;
@@ -22,6 +21,7 @@ use crate::messages::inputs::Inputs;
 use crate::models::options::Options;
 use crate::models::world::World;
 use crate::updaters::world::{WorldUpdater, WorldUpdaterConfiguration};
+use com_croftsoft_lib_animation::frame_rater::FrameRater;
 use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
 use std::rc::Rc;

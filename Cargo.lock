@@ -53,9 +53,9 @@ dependencies = [
 
 [[package]]
 name = "com-croftsoft-lib-animation"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "55f1e7b8790eabbf59cb56c3e91808277d1827112404ae4b5a8b10c69caa28cd"
+checksum = "91a5e5db66a87c009d52e7d6921dc9dd0bba1ad7e90d277cd682bd914bd4ccfc"
 dependencies = [
  "com-croftsoft-lib-role",
 ]
