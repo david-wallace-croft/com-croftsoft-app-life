@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-23
+//! - Updated: 2023-02-24
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -15,7 +15,7 @@ use crate::constants::OVERLAY_REFRESH_PERIOD_MILLIS;
 use crate::engine::frame_rater::FrameRater;
 use crate::models::clock::Clock;
 use crate::models::overlay::Overlay;
-use com_croftsoft_lib_animation::metronome::simple::SimpleMetronome;
+use com_croftsoft_lib_animation::metronome::delta::DeltaMetronome;
 use com_croftsoft_lib_animation::metronome::Metronome;
 use com_croftsoft_lib_role::Updater;
 use core::cell::{Ref, RefCell, RefMut};
@@ -37,7 +37,7 @@ pub struct OverlayUpdater {
   events: Rc<RefCell<dyn OverlayUpdaterEvents>>,
   frame_rater: Rc<RefCell<FrameRater>>,
   inputs: Rc<RefCell<dyn OverlayUpdaterInputs>>,
-  metronome: SimpleMetronome,
+  metronome: DeltaMetronome,
   overlay: Rc<RefCell<Overlay>>,
 }
 
@@ -60,7 +60,7 @@ impl OverlayUpdater {
     inputs: Rc<RefCell<dyn OverlayUpdaterInputs>>,
     overlay: Rc<RefCell<Overlay>>,
   ) -> Self {
-    let metronome = SimpleMetronome {
+    let metronome = DeltaMetronome {
       period_millis: OVERLAY_REFRESH_PERIOD_MILLIS,
       time_millis_next_tick: 0.,
     };
