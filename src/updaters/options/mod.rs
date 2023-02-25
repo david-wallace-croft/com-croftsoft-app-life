@@ -49,9 +49,11 @@ impl OptionsUpdater {
 impl Updater for OptionsUpdater {
   fn update(&mut self) {
     let inputs: Ref<dyn OptionsUpdaterInputs> = self.inputs.borrow();
-    if let Some(display) = inputs.get_frame_rate_display_change_requested() {
-      self.options.borrow_mut().frame_rate_display = display;
-      if display {
+    if let Some(frame_rate_display) =
+      inputs.get_frame_rate_display_change_requested()
+    {
+      self.options.borrow_mut().frame_rate_display = frame_rate_display;
+      if frame_rate_display {
         self.frame_rater.borrow_mut().clear();
       }
     }
