@@ -259,7 +259,7 @@ impl ClockUpdaterOptions for WorldUpdaterOptionsAdapter {
 }
 
 pub struct WorldUpdater {
-  child_updaters: [Box<dyn Updater>; 6],
+  child_updaters: Vec<Box<dyn Updater>>,
 }
 
 impl WorldUpdater {
@@ -318,7 +318,7 @@ impl WorldUpdater {
       world_updater_inputs_adapter,
       metronome,
     );
-    let child_updaters: [Box<dyn Updater>; 6] = [
+    let child_updaters: Vec<Box<dyn Updater>> = vec![
       Box::new(metronome_updater),
       Box::new(options_updater),
       Box::new(frame_rater_updater),
