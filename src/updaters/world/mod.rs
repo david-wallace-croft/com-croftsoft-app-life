@@ -102,7 +102,7 @@ pub trait WorldUpdaterInputs {
   fn get_period_millis_change_requested(&self) -> Option<f64>;
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_reset_requested(&self) -> bool;
-  fn get_update_time_millis(&self) -> f64;
+  fn get_current_time_millis(&self) -> f64;
 }
 
 struct WorldUpdaterInputsAdapter {
@@ -164,7 +164,7 @@ impl FrameRaterUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 
   fn get_update_time_millis(&self) -> f64 {
-    self.inputs.borrow().get_update_time_millis()
+    self.inputs.borrow().get_current_time_millis()
   }
 }
 
@@ -190,13 +190,13 @@ impl OptionsUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 
   fn get_update_time_millis(&self) -> f64 {
-    self.inputs.borrow().get_update_time_millis()
+    self.inputs.borrow().get_current_time_millis()
   }
 }
 
 impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
   fn get_current_time_millis(&self) -> f64 {
-    self.inputs.borrow().get_update_time_millis()
+    self.inputs.borrow().get_current_time_millis()
   }
 
   fn get_period_millis_change_requested(&self) -> Option<f64> {
@@ -210,7 +210,7 @@ impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
 
 impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
   fn get_current_time_millis(&self) -> f64 {
-    self.inputs.borrow().get_update_time_millis()
+    self.inputs.borrow().get_current_time_millis()
   }
 
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {

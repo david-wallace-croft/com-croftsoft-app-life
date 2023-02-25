@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-02-23
+//! - Updated: 2023-02-24
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -94,9 +94,9 @@ impl Initializer for Looper {
 impl LoopUpdater for Looper {
   fn update_loop(
     &mut self,
-    update_time_millis: f64,
+    current_time_millis: f64,
   ) {
-    self.inputs.borrow_mut().update_time_millis = update_time_millis;
+    self.inputs.borrow_mut().current_time_millis = current_time_millis;
     self.life_component.update();
     self.world_updater.update();
     self.life_component.paint();
