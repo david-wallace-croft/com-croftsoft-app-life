@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-23
+//! - Updated: 2023-02-24
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -120,9 +120,8 @@ impl Updater for CellsUpdater {
       self.events.borrow_mut().set_updated();
       return;
     }
-    let pause: bool = self.options.borrow().get_pause();
     let time_to_update: bool = self.inputs.borrow().get_time_to_update();
-    if !pause && time_to_update {
+    if time_to_update && !self.options.borrow().get_pause() {
       self.cells.borrow_mut().swap_new_and_old();
       for i in 0..CELL_COUNT {
         let count = self.count_adjacent_alive(i);

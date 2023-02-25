@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-23
+//! - Updated: 2023-02-24
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -61,8 +61,7 @@ impl Updater for ClockUpdater {
       self.events.borrow_mut().set_updated();
       return;
     }
-    let pause: bool = self.options.borrow().get_pause();
-    if pause || !input.get_time_to_update() {
+    if !input.get_time_to_update() || self.options.borrow().get_pause() {
       return;
     }
     clock.time = clock.time.saturating_add(1);
