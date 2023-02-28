@@ -98,11 +98,11 @@ impl OverlayUpdaterEvents for WorldUpdaterEventsAdapter {
 
 pub trait WorldUpdaterInputs {
   fn get_cell_toggle_requested(&self) -> Option<usize>;
+  fn get_current_time_millis(&self) -> f64;
+  fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_pause_change_requested(&self) -> Option<bool>;
   fn get_period_millis_change_requested(&self) -> Option<f64>;
-  fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_reset_requested(&self) -> bool;
-  fn get_current_time_millis(&self) -> f64;
 }
 
 struct WorldUpdaterInputsAdapter {

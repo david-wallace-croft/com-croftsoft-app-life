@@ -11,9 +11,12 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use crate::{engine::functions::web_sys::add_change_handler_by_id, constants::MILLIS_PER_SECOND};
 use crate::engine::traits::Component;
 use crate::messages::inputs::Inputs;
+use crate::{
+  constants::MILLIS_PER_SECOND,
+  engine::functions::web_sys::add_change_handler_by_id,
+};
 use com_croftsoft_lib_role::{Initializer, Updater};
 use core::cell::RefCell;
 use futures::channel::mpsc::{TryRecvError, UnboundedReceiver};
@@ -78,7 +81,8 @@ impl Updater for SpeedComponent {
         let v: Result<usize, _> = value.parse();
         let frequency: f64 = v.unwrap() as f64;
         let period_millis: f64 = (MILLIS_PER_SECOND / frequency).trunc();
-        self.inputs.borrow_mut().period_millis_change_requested = Some(period_millis);
+        self.inputs.borrow_mut().period_millis_change_requested =
+          Some(period_millis);
       }
     }
   }
