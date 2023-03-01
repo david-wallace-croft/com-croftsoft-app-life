@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-25
+//! - Updated: 2023-02-28
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -21,6 +21,7 @@ use super::frame_rater::{FrameRaterUpdater, FrameRaterUpdaterInputs};
 use super::options::{OptionsUpdater, OptionsUpdaterInputs};
 use super::overlay::{
   OverlayUpdater, OverlayUpdaterEvents, OverlayUpdaterInputs,
+  OverlayUpdaterOptions,
 };
 use crate::models::options::Options;
 use crate::models::overlay::Overlay;
@@ -258,6 +259,12 @@ impl ClockUpdaterOptions for WorldUpdaterOptionsAdapter {
   }
 }
 
+impl OverlayUpdaterOptions for WorldUpdaterOptionsAdapter {
+  fn get_pause(&self) -> bool {
+    self.options.borrow().get_pause()
+  }
+}
+
 pub struct WorldUpdater {
   child_updaters: Vec<Box<dyn Updater>>,
 }
@@ -292,7 +299,7 @@ impl WorldUpdater {
       clock.clone(),
       world_updater_events_adapter.clone(),
       world_updater_inputs_adapter.clone(),
-      world_updater_options_adapter,
+      world_updater_options_adapter.clone(),
     );
     let frame_rater_updater = FrameRaterUpdater::new(
       frame_rater.clone(),
@@ -307,6 +314,7 @@ impl WorldUpdater {
       world_updater_events_adapter.clone(),
       frame_rater,
       world_updater_inputs_adapter.clone(),
+      world_updater_options_adapter,
       overlay,
     );
     let metronome = Rc::new(RefCell::new(DeltaMetronome {

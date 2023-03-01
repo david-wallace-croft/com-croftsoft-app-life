@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-25
+//! - Updated: 2023-02-28
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -33,12 +33,17 @@ pub trait OverlayUpdaterInputs {
   fn get_reset_requested(&self) -> bool;
 }
 
+pub trait OverlayUpdaterOptions {
+  fn get_pause(&self) -> bool;
+}
+
 pub struct OverlayUpdater {
   clock: Rc<RefCell<Clock>>,
   events: Rc<RefCell<dyn OverlayUpdaterEvents>>,
   frame_rater: Rc<RefCell<FrameRater>>,
   inputs: Rc<RefCell<dyn OverlayUpdaterInputs>>,
   metronome: DeltaMetronome,
+  options: Rc<RefCell<dyn OverlayUpdaterOptions>>,
   overlay: Rc<RefCell<Overlay>>,
 }
 
@@ -59,6 +64,7 @@ impl OverlayUpdater {
     events: Rc<RefCell<dyn OverlayUpdaterEvents>>,
     frame_rater: Rc<RefCell<FrameRater>>,
     inputs: Rc<RefCell<dyn OverlayUpdaterInputs>>,
+    options: Rc<RefCell<dyn OverlayUpdaterOptions>>,
     overlay: Rc<RefCell<Overlay>>,
   ) -> Self {
     let metronome = DeltaMetronome {
@@ -71,6 +77,7 @@ impl OverlayUpdater {
       frame_rater,
       inputs,
       metronome,
+      options,
       overlay,
     }
   }
@@ -86,14 +93,14 @@ impl OverlayUpdater {
 impl Updater for OverlayUpdater {
   fn update(&mut self) {
     let inputs: Ref<dyn OverlayUpdaterInputs> = self.inputs.borrow();
-    if inputs.get_reset_requested()
-      || inputs.get_frame_rate_display_change_requested().is_some()
+    if inputs.get_frame_rate_display_change_requested().is_some()
       || inputs.get_pause_change_requested().is_some()
+      || inputs.get_reset_requested()
     {
       self.update_overlay();
       return;
     }
-    if !inputs.get_time_to_update() {
+    if !inputs.get_time_to_update() || self.options.borrow().get_pause() {
       return;
     }
     let current_time_millis = inputs.get_current_time_millis();
