@@ -168,6 +168,20 @@ impl FrameRaterUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
+impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
+  fn get_current_time_millis(&self) -> f64 {
+    self.inputs.borrow().get_current_time_millis()
+  }
+
+  fn get_period_millis_change_requested(&self) -> Option<f64> {
+    self.inputs.borrow().get_period_millis_change_requested()
+  }
+
+  fn get_reset_requested(&self) -> bool {
+    self.inputs.borrow().get_reset_requested()
+  }
+}
+
 impl OptionsUpdaterInputs for WorldUpdaterInputsAdapter {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
     self.inputs.borrow().get_frame_rate_display_change_requested()
@@ -191,20 +205,6 @@ impl OptionsUpdaterInputs for WorldUpdaterInputsAdapter {
 
   fn get_update_time_millis(&self) -> f64 {
     self.inputs.borrow().get_current_time_millis()
-  }
-}
-
-impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
-  fn get_current_time_millis(&self) -> f64 {
-    self.inputs.borrow().get_current_time_millis()
-  }
-
-  fn get_period_millis_change_requested(&self) -> Option<f64> {
-    self.inputs.borrow().get_period_millis_change_requested()
-  }
-
-  fn get_reset_requested(&self) -> bool {
-    self.inputs.borrow().get_reset_requested()
   }
 }
 
