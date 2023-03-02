@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-28
+//! - Updated: 2023-03-01
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -17,7 +17,6 @@ use super::cells::{
 use super::clock::{
   ClockUpdater, ClockUpdaterEvents, ClockUpdaterInputs, ClockUpdaterOptions,
 };
-use super::frame_rater::{FrameRaterUpdater, FrameRaterUpdaterInputs};
 use super::options::{OptionsUpdater, OptionsUpdaterInputs};
 use super::overlay::{
   OverlayUpdater, OverlayUpdaterEvents, OverlayUpdaterInputs,
@@ -26,6 +25,8 @@ use super::overlay::{
 use crate::models::options::Options;
 use crate::models::overlay::Overlay;
 use crate::models::world::World;
+use com_croftsoft_lib_animation::frame_rater::updater::FrameRaterUpdater;
+use com_croftsoft_lib_animation::frame_rater::updater::FrameRaterUpdaterInputs;
 use com_croftsoft_lib_animation::frame_rater::FrameRater;
 use com_croftsoft_lib_animation::metronome::delta::DeltaMetronome;
 use com_croftsoft_lib_animation::metronome::updater::{
@@ -273,7 +274,7 @@ impl WorldUpdater {
   pub fn new(
     configuration: WorldUpdaterConfiguration,
     events: Rc<RefCell<dyn WorldUpdaterEvents>>,
-    frame_rater: Rc<RefCell<FrameRater>>,
+    frame_rater: Rc<RefCell<dyn FrameRater>>,
     inputs: Rc<RefCell<dyn WorldUpdaterInputs>>,
     options: Rc<RefCell<Options>>,
     world: Rc<RefCell<World>>,
@@ -302,9 +303,9 @@ impl WorldUpdater {
       world_updater_options_adapter.clone(),
     );
     let frame_rater_updater = FrameRaterUpdater::new(
+      false,
       frame_rater.clone(),
       world_updater_inputs_adapter.clone(),
-      options.clone(),
     );
     let overlay: Rc<RefCell<Overlay>> = world.overlay.clone();
     let options_updater =
