@@ -53,18 +53,20 @@ dependencies = [
 
 [[package]]
 name = "com-croftsoft-lib-animation"
-version = "0.0.3"
+version = "0.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eb83692c04451832616f9cb7c644ef135bafc82e559baa7c4ad17727bb6610ac"
+checksum = "75d6a22a377763b3510904f16abf2d967ee33755e1ca43cccef5d96732c61ada"
 dependencies = [
  "com-croftsoft-lib-role",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
 name = "com-croftsoft-lib-role"
-version = "0.1.4"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "984331ce20c370427e32edf600c3ceda10cee78395980ccbef38d8fc7d53d5a5"
+checksum = "f7300d04e6ef33daadcda022076d9a790697646ab4c0f921a5be592c729d65e0"
 
 [[package]]
 name = "console_error_panic_hook"

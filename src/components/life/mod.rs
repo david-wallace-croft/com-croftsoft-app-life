@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-02-23
+//! - Updated: 2023-03-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -122,11 +122,11 @@ impl Initializer for LifeComponent {
 }
 
 impl Painter for LifeComponent {
-  fn paint(&self) {
+  fn paint(&mut self) {
     if !self.events.borrow().updated {
       return;
     }
-    self.canvas_component.borrow().paint();
+    self.canvas_component.borrow_mut().paint();
   }
 }
 

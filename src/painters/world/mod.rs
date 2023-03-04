@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-02
+//! - Updated: 2023-03-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -13,10 +13,10 @@
 
 use super::cells::CellsPainter;
 use super::overlay::OverlayPainter;
-use crate::constants::{SPACE_HEIGHT, SPACE_WIDTH};
+use crate::constants::{FILL_STYLE_BACKGROUND, SPACE_HEIGHT, SPACE_WIDTH};
 use crate::models::options::Options;
 use crate::models::world::World;
-use crate::painters::background::BackgroundPainter;
+use com_croftsoft_lib_animation::painter::background::BackgroundPainter;
 use com_croftsoft_lib_role::Painter;
 use core::cell::RefCell;
 use js_sys::Object;
@@ -47,8 +47,12 @@ impl WorldPainter {
       Rc::new(RefCell::new(canvas_context));
     let canvas_height: f64 = html_canvas_element.height() as f64;
     let canvas_width: f64 = html_canvas_element.width() as f64;
-    let background_painter =
-      BackgroundPainter::new(canvas_height, canvas_width, context.clone());
+    let background_painter = BackgroundPainter::new(
+      canvas_height,
+      canvas_width,
+      context.clone(),
+      FILL_STYLE_BACKGROUND,
+    );
     let scale_x = canvas_width / SPACE_WIDTH as f64;
     let scale_y = canvas_height / SPACE_HEIGHT as f64;
     let cells_painter =
@@ -67,7 +71,7 @@ impl WorldPainter {
 }
 
 impl Painter for WorldPainter {
-  fn paint(&self) {
-    self.painters.iter().for_each(|painter| painter.paint());
+  fn paint(&mut self) {
+    self.painters.iter_mut().for_each(|painter| painter.paint());
   }
 }
