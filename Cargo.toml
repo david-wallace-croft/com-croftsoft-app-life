@@ -21,12 +21,12 @@ anyhow = "1.0.66"
 com-croftsoft-lib-animation = "0.0.4"
 com-croftsoft-lib-role = "0.2.0"
 console_error_panic_hook = "0.1.7"
-js-sys = "0.3.61"
-wasm-bindgen = "0.2.84"
-wee_alloc = { version = "0.4.5", optional = true }
-rand = "0.8.5"
 futures = "0.3.26"
+js-sys = "0.3.61"
+rand = "0.8.5"
+wasm-bindgen = "0.2.84"
 wasm-bindgen-futures = "0.4.34"
+wee_alloc = { version = "0.4.5", optional = true }
 
 [dependencies.getrandom]
 features = [
@@ -53,8 +53,6 @@ features = [
 version = "0.3.61"
 
 [dev-dependencies]
-futures = "0.3.26"
-wasm-bindgen-futures = "0.4.34"
 wasm-bindgen-test = "0.3.34"
 
 [features]
