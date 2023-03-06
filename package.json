@@ -1,20 +1,21 @@
 {
-  "name": "com-croftsoft-app-life",
-  "version": "0.4.1-SNAPSHOT",
   "author": "David Wallace Croft <david@CroftSoft.com>",
   "description": "Conway's Game of Life",
+  "devDependencies": {
+    "@wasm-tool/wasm-pack-plugin": "^1.6.0",
+    "@webpack-cli/serve": "^2.0.1",
+    "copy-webpack-plugin": "^5.1.2",
+    "rimraf": "^4.3.0",
+    "wasm-pack": "^0.10.3",
+    "webpack": "^5.75.0",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "license": "MIT",
+  "name": "com-croftsoft-app-life",
   "scripts": {
     "build": "rimraf dist pkg && webpack",
     "start": "rimraf dist pkg && webpack serve",
     "test": "cargo test && wasm-pack test --firefox --headless"
   },
-  "devDependencies": {
-    "@wasm-tool/wasm-pack-plugin": "^1.6.0",
-    "@webpack-cli/serve": "^2.0.1",
-    "copy-webpack-plugin": "^5.1.2",
-    "rimraf": "^3.0.2",
-    "wasm-pack": "^0.10.3",
-    "webpack": "^5.75.0",
-    "webpack-dev-server": "^4.11.1"
-  }
+  "version": "0.4.1-SNAPSHOT"
 }
