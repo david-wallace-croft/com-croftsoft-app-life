@@ -5,18 +5,16 @@
 //! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-20
+//! - Updated: 2023-03-07
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+use crate::constants::MILLIS_PER_SECOND;
 use crate::engine::traits::Component;
 use crate::messages::inputs::Inputs;
-use crate::{
-  constants::MILLIS_PER_SECOND,
-  engine::functions::web_sys::add_change_handler_by_id,
-};
+use com_croftsoft_lib_animation::web_sys::add_change_handler_by_id;
 use com_croftsoft_lib_role::{Initializer, Updater};
 use core::cell::RefCell;
 use futures::channel::mpsc::{TryRecvError, UnboundedReceiver};

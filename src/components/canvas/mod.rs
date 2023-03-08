@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-03
+//! - Updated: 2023-03-07
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -13,14 +13,14 @@
 
 use crate::constants::{SPACE_HEIGHT, SPACE_WIDTH};
 use crate::engine::functions::location::to_index_from_xy;
-use crate::engine::functions::web_sys::{
-  add_mouse_down_handler_by_id, get_canvas_xy, get_html_canvas_element_by_id,
-};
 use crate::engine::traits::Component;
 use crate::messages::inputs::Inputs;
 use crate::models::options::Options;
 use crate::models::world::World;
 use crate::painters::world::WorldPainter;
+use com_croftsoft_lib_animation::web_sys::{
+  add_mouse_down_handler_by_id, get_canvas_xy, get_html_canvas_element_by_id,
+};
 use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
 use futures::channel::mpsc::{TryRecvError, UnboundedReceiver};

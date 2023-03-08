@@ -17,8 +17,9 @@ version = "0.4.1-SNAPSHOT"
 
 [dependencies]
 anyhow = "1.0.66"
+# com-croftsoft-lib-animation = { path = "../../../crates/com-croftsoft-lib-animation" }
 # com-croftsoft-lib-animation = { git = "https://github.com/david-wallace-croft/com-croftsoft-lib-animation" }
-com-croftsoft-lib-animation = "0.0.4"
+com-croftsoft-lib-animation = "0.0.5"
 com-croftsoft-lib-role = "0.2.0"
 console_error_panic_hook = "0.1.7"
 futures = "0.3.26"

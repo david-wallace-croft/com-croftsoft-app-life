@@ -53,12 +53,16 @@ dependencies = [
 
 [[package]]
 name = "com-croftsoft-lib-animation"
-version = "0.0.4"
+version = "0.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75d6a22a377763b3510904f16abf2d967ee33755e1ca43cccef5d96732c61ada"
+checksum = "2c418c8ca4bd7cf013674b6fe6a03275857c3e97c5e2ac6ae882d7e448aafe07"
 dependencies = [
+ "anyhow",
  "com-croftsoft-lib-role",
+ "futures",
+ "js-sys",
  "wasm-bindgen",
+ "wasm-bindgen-futures",
  "web-sys",
 ]
 

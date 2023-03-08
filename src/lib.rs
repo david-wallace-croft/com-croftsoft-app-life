@@ -13,8 +13,8 @@
 
 #![allow(clippy::uninlined_format_args)]
 
+use com_croftsoft_lib_animation::web_sys::log;
 use constants::INFO;
-use engine::functions::web_sys::log;
 use engine::looper::Looper;
 use wasm_bindgen::prelude::*;
 use wee_alloc::WeeAlloc;
