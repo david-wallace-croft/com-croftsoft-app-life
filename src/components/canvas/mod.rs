@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-07
+//! - Updated: 2023-03-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -16,8 +16,8 @@ use crate::engine::functions::location::to_index_from_xy;
 use crate::engine::traits::Component;
 use crate::messages::inputs::Inputs;
 use crate::models::options::Options;
-use crate::models::world::World;
-use crate::painters::world::WorldPainter;
+use crate::models::root::Root;
+use crate::painters::root::RootPainter;
 use com_croftsoft_lib_animation::web_sys::{
   add_mouse_down_handler_by_id, get_canvas_xy, get_html_canvas_element_by_id,
 };
@@ -31,9 +31,9 @@ pub struct CanvasComponent {
   id: String,
   inputs: Rc<RefCell<Inputs>>,
   options: Rc<RefCell<Options>>,
-  root_painter_option: Option<WorldPainter>,
+  root_model: Rc<RefCell<Root>>,
+  root_painter_option: Option<RootPainter>,
   unbounded_receiver_option: Option<UnboundedReceiver<MouseEvent>>,
-  world: Rc<RefCell<World>>,
 }
 
 impl CanvasComponent {
@@ -51,15 +51,15 @@ impl CanvasComponent {
     id: &str,
     inputs: Rc<RefCell<Inputs>>,
     options: Rc<RefCell<Options>>,
-    world: Rc<RefCell<World>>,
+    root_model: Rc<RefCell<Root>>,
   ) -> Self {
     Self {
       options,
       id: String::from(id),
       inputs,
+      root_model,
       root_painter_option: None,
       unbounded_receiver_option: None,
-      world,
     }
   }
 
@@ -106,10 +106,10 @@ impl Component for CanvasComponent {
 impl Initializer for CanvasComponent {
   fn initialize(&mut self) {
     self.unbounded_receiver_option = add_mouse_down_handler_by_id(&self.id);
-    self.root_painter_option = Some(WorldPainter::new(
+    self.root_painter_option = Some(RootPainter::new(
       "canvas",
       self.options.clone(),
-      &self.world.borrow(),
+      &self.root_model.borrow(),
     ));
   }
 }

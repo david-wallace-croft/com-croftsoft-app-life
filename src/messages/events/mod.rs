@@ -5,13 +5,13 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-02-15
+//! - Updated: 2023-03-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use crate::updaters::world::WorldUpdaterEvents;
+use crate::updaters::root::RootUpdaterEvents;
 
 #[derive(Default)]
 pub struct Events {
@@ -28,7 +28,7 @@ impl Events {
   }
 }
 
-impl WorldUpdaterEvents for Events {
+impl RootUpdaterEvents for Events {
   fn get_time_to_update(&self) -> bool {
     self.time_to_update
   }

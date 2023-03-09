@@ -5,13 +5,13 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-02-24
+//! - Updated: 2023-03-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use crate::updaters::world::WorldUpdaterInputs;
+use crate::updaters::root::RootUpdaterInputs;
 
 // TODO: move this to a different module
 #[derive(Default)]
@@ -35,7 +35,7 @@ impl Inputs {
   }
 }
 
-impl WorldUpdaterInputs for Inputs {
+impl RootUpdaterInputs for Inputs {
   fn get_cell_toggle_requested(&self) -> Option<usize> {
     self.cell_toggle_requested
   }

@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-07
+//! - Updated: 2023-03-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -20,7 +20,7 @@ use crate::engine::traits::Component;
 use crate::messages::events::Events;
 use crate::messages::inputs::Inputs;
 use crate::models::options::Options;
-use crate::models::world::World;
+use crate::models::root::Root;
 use com_croftsoft_lib_animation::web_sys::get_window;
 use com_croftsoft_lib_role::{Initializer, Painter, Updater};
 use core::cell::RefCell;
@@ -44,13 +44,13 @@ impl LifeComponent {
     _id: &str,
     inputs: Rc<RefCell<Inputs>>,
     options: Rc<RefCell<Options>>,
-    world: Rc<RefCell<World>>,
+    root_model: Rc<RefCell<Root>>,
   ) -> Self {
     let canvas_component = Rc::new(RefCell::new(CanvasComponent::new(
       "canvas",
       inputs.clone(),
       options,
-      world,
+      root_model,
     )));
     let frame_rate_component = Rc::new(RefCell::new(FrameRateComponent::new(
       "frame-rate",

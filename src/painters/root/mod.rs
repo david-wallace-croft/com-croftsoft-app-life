@@ -1,11 +1,11 @@
 // =============================================================================
-//! - World Painter for CroftSoft Life
+//! - Root Painter for CroftSoft Life
 //!
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-03
+//! - Updated: 2023-03-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -15,7 +15,7 @@ use super::cells::CellsPainter;
 use super::overlay::OverlayPainter;
 use crate::constants::{FILL_STYLE_BACKGROUND, SPACE_HEIGHT, SPACE_WIDTH};
 use crate::models::options::Options;
-use crate::models::world::World;
+use crate::models::root::Root;
 use com_croftsoft_lib_animation::painter::background::BackgroundPainter;
 use com_croftsoft_lib_role::Painter;
 use core::cell::RefCell;
@@ -26,15 +26,15 @@ use web_sys::{
   window, CanvasRenderingContext2d, Document, Element, HtmlCanvasElement,
 };
 
-pub struct WorldPainter {
+pub struct RootPainter {
   painters: Vec<Box<dyn Painter>>,
 }
 
-impl WorldPainter {
+impl RootPainter {
   pub fn new(
     canvas_element_id: &str,
     options: Rc<RefCell<Options>>,
-    world: &World,
+    root_model: &Root,
   ) -> Self {
     let document: Document = window().unwrap().document().unwrap();
     let element: Element =
@@ -55,10 +55,14 @@ impl WorldPainter {
     );
     let scale_x = canvas_width / SPACE_WIDTH as f64;
     let scale_y = canvas_height / SPACE_HEIGHT as f64;
-    let cells_painter =
-      CellsPainter::new(world.cells.clone(), context.clone(), scale_x, scale_y);
+    let cells_painter = CellsPainter::new(
+      root_model.cells.clone(),
+      context.clone(),
+      scale_x,
+      scale_y,
+    );
     let overlay_painter =
-      OverlayPainter::new(context, options, world.overlay.clone());
+      OverlayPainter::new(context, options, root_model.overlay.clone());
     let painters: Vec<Box<dyn Painter>> = vec![
       Box::new(background_painter),
       Box::new(cells_painter),
@@ -70,7 +74,7 @@ impl WorldPainter {
   }
 }
 
-impl Painter for WorldPainter {
+impl Painter for RootPainter {
   fn paint(&mut self) {
     self.painters.iter_mut().for_each(|painter| painter.paint());
   }

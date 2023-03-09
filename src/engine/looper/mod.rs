@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-07
+//! - Updated: 2023-03-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -17,8 +17,8 @@ use crate::constants::CONFIGURATION;
 use crate::messages::events::Events;
 use crate::messages::inputs::Inputs;
 use crate::models::options::Options;
-use crate::models::world::World;
-use crate::updaters::world::{WorldUpdater, WorldUpdaterConfiguration};
+use crate::models::root::Root;
+use crate::updaters::root::{RootUpdater, RootUpdaterConfiguration};
 use com_croftsoft_lib_animation::frame_rater::simple::SimpleFrameRater;
 use com_croftsoft_lib_animation::frame_rater::FrameRater;
 use com_croftsoft_lib_animation::web_sys::{spawn_local_loop, LoopUpdater};
@@ -31,7 +31,7 @@ pub struct Looper {
   events: Rc<RefCell<Events>>,
   inputs: Rc<RefCell<Inputs>>,
   life_component: LifeComponent,
-  world_updater: WorldUpdater,
+  root_updater: RootUpdater,
 }
 
 impl Looper {
@@ -45,7 +45,7 @@ impl Looper {
     let Configuration {
       update_period_millis_initial,
     } = configuration;
-    let world_updater_configuration = WorldUpdaterConfiguration {
+    let root_updater_configuration = RootUpdaterConfiguration {
       update_period_millis_initial,
     };
     let frame_rater: Rc<RefCell<dyn FrameRater>> = Rc::new(RefCell::new(
@@ -54,27 +54,27 @@ impl Looper {
     let events = Rc::new(RefCell::new(Events::default()));
     let inputs = Rc::new(RefCell::new(Inputs::default()));
     let options = Rc::new(RefCell::new(Options::default()));
-    let world = Rc::new(RefCell::new(World::default()));
+    let root_model = Rc::new(RefCell::new(Root::default()));
     let life_component = LifeComponent::new(
       events.clone(),
       "life",
       inputs.clone(),
       options.clone(),
-      world.clone(),
+      root_model.clone(),
     );
-    let world_updater = WorldUpdater::new(
-      world_updater_configuration,
+    let root_updater = RootUpdater::new(
+      root_updater_configuration,
       events.clone(),
       frame_rater,
       inputs.clone(),
       options,
-      world,
+      root_model,
     );
     Self {
       events,
       inputs,
       life_component,
-      world_updater,
+      root_updater,
     }
   }
 }
@@ -99,7 +99,7 @@ impl LoopUpdater for Looper {
   ) {
     self.inputs.borrow_mut().current_time_millis = current_time_millis;
     self.life_component.update();
-    self.world_updater.update();
+    self.root_updater.update();
     self.life_component.paint();
     self.events.borrow_mut().clear();
     self.inputs.borrow_mut().clear();

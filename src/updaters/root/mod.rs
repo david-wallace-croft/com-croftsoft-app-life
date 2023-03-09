@@ -1,11 +1,11 @@
 // =============================================================================
-//! - World Updater for CroftSoft Life
+//! - Root Updater for CroftSoft Life
 //!
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-03-01
+//! - Updated: 2023-03-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -24,7 +24,7 @@ use super::overlay::{
 };
 use crate::models::options::Options;
 use crate::models::overlay::Overlay;
-use crate::models::world::World;
+use crate::models::root::Root;
 use com_croftsoft_lib_animation::frame_rater::updater::FrameRaterUpdater;
 use com_croftsoft_lib_animation::frame_rater::updater::FrameRaterUpdaterInputs;
 use com_croftsoft_lib_animation::frame_rater::FrameRater;
@@ -36,11 +36,11 @@ use com_croftsoft_lib_role::Updater;
 use core::cell::{Ref, RefCell};
 use std::rc::Rc;
 
-pub struct WorldUpdaterConfiguration {
+pub struct RootUpdaterConfiguration {
   pub update_period_millis_initial: f64,
 }
 
-pub trait WorldUpdaterEvents {
+pub trait RootUpdaterEvents {
   fn get_updated(&self) -> bool;
   fn get_time_to_update(&self) -> bool;
   fn get_update_period_millis_changed(&self) -> Option<f64>;
@@ -52,31 +52,31 @@ pub trait WorldUpdaterEvents {
   fn set_updated(&mut self);
 }
 
-struct WorldUpdaterEventsAdapter {
-  events: Rc<RefCell<dyn WorldUpdaterEvents>>,
+struct RootUpdaterEventsAdapter {
+  events: Rc<RefCell<dyn RootUpdaterEvents>>,
 }
 
-impl WorldUpdaterEventsAdapter {
-  fn new(events: Rc<RefCell<dyn WorldUpdaterEvents>>) -> Self {
+impl RootUpdaterEventsAdapter {
+  fn new(events: Rc<RefCell<dyn RootUpdaterEvents>>) -> Self {
     Self {
       events,
     }
   }
 }
 
-impl CellsUpdaterEvents for WorldUpdaterEventsAdapter {
+impl CellsUpdaterEvents for RootUpdaterEventsAdapter {
   fn set_updated(&mut self) {
     self.events.borrow_mut().set_updated();
   }
 }
 
-impl ClockUpdaterEvents for WorldUpdaterEventsAdapter {
+impl ClockUpdaterEvents for RootUpdaterEventsAdapter {
   fn set_updated(&mut self) {
     self.events.borrow_mut().set_updated();
   }
 }
 
-impl MetronomeUpdaterEvents for WorldUpdaterEventsAdapter {
+impl MetronomeUpdaterEvents for RootUpdaterEventsAdapter {
   fn set_period_millis_changed(
     &mut self,
     update_period_millis: f64,
@@ -92,13 +92,13 @@ impl MetronomeUpdaterEvents for WorldUpdaterEventsAdapter {
   }
 }
 
-impl OverlayUpdaterEvents for WorldUpdaterEventsAdapter {
+impl OverlayUpdaterEvents for RootUpdaterEventsAdapter {
   fn set_updated(&mut self) {
     self.events.borrow_mut().set_updated();
   }
 }
 
-pub trait WorldUpdaterInputs {
+pub trait RootUpdaterInputs {
   fn get_cell_toggle_requested(&self) -> Option<usize>;
   fn get_current_time_millis(&self) -> f64;
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
@@ -107,15 +107,15 @@ pub trait WorldUpdaterInputs {
   fn get_reset_requested(&self) -> bool;
 }
 
-struct WorldUpdaterInputsAdapter {
-  events: Rc<RefCell<dyn WorldUpdaterEvents>>,
-  inputs: Rc<RefCell<dyn WorldUpdaterInputs>>,
+struct RootUpdaterInputsAdapter {
+  events: Rc<RefCell<dyn RootUpdaterEvents>>,
+  inputs: Rc<RefCell<dyn RootUpdaterInputs>>,
 }
 
-impl WorldUpdaterInputsAdapter {
+impl RootUpdaterInputsAdapter {
   fn new(
-    events: Rc<RefCell<dyn WorldUpdaterEvents>>,
-    inputs: Rc<RefCell<dyn WorldUpdaterInputs>>,
+    events: Rc<RefCell<dyn RootUpdaterEvents>>,
+    inputs: Rc<RefCell<dyn RootUpdaterInputs>>,
   ) -> Self {
     Self {
       events,
@@ -124,7 +124,7 @@ impl WorldUpdaterInputsAdapter {
   }
 }
 
-impl CellsUpdaterInputs for WorldUpdaterInputsAdapter {
+impl CellsUpdaterInputs for RootUpdaterInputsAdapter {
   fn get_cell_toggle_requested(&self) -> Option<usize> {
     self.inputs.borrow().get_cell_toggle_requested()
   }
@@ -138,7 +138,7 @@ impl CellsUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
-impl ClockUpdaterInputs for WorldUpdaterInputsAdapter {
+impl ClockUpdaterInputs for RootUpdaterInputsAdapter {
   fn get_reset_requested(&self) -> bool {
     self.inputs.borrow().get_reset_requested()
   }
@@ -148,7 +148,7 @@ impl ClockUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
-impl FrameRaterUpdaterInputs for WorldUpdaterInputsAdapter {
+impl FrameRaterUpdaterInputs for RootUpdaterInputsAdapter {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
     self.inputs.borrow().get_frame_rate_display_change_requested()
   }
@@ -170,7 +170,7 @@ impl FrameRaterUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
-impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
+impl MetronomeUpdaterInputs for RootUpdaterInputsAdapter {
   fn get_current_time_millis(&self) -> f64 {
     self.inputs.borrow().get_current_time_millis()
   }
@@ -184,7 +184,7 @@ impl MetronomeUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
-impl OptionsUpdaterInputs for WorldUpdaterInputsAdapter {
+impl OptionsUpdaterInputs for RootUpdaterInputsAdapter {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
     self.inputs.borrow().get_frame_rate_display_change_requested()
   }
@@ -210,7 +210,7 @@ impl OptionsUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
-impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
+impl OverlayUpdaterInputs for RootUpdaterInputsAdapter {
   fn get_current_time_millis(&self) -> f64 {
     self.inputs.borrow().get_current_time_millis()
   }
@@ -232,90 +232,90 @@ impl OverlayUpdaterInputs for WorldUpdaterInputsAdapter {
   }
 }
 
-pub trait WorldUpdaterOptions {
+pub trait RootUpdaterOptions {
   fn get_pause(&self) -> bool;
 }
 
-struct WorldUpdaterOptionsAdapter {
-  options: Rc<RefCell<dyn WorldUpdaterOptions>>,
+struct RootUpdaterOptionsAdapter {
+  options: Rc<RefCell<dyn RootUpdaterOptions>>,
 }
 
-impl WorldUpdaterOptionsAdapter {
-  fn new(options: Rc<RefCell<dyn WorldUpdaterOptions>>) -> Self {
+impl RootUpdaterOptionsAdapter {
+  fn new(options: Rc<RefCell<dyn RootUpdaterOptions>>) -> Self {
     Self {
       options,
     }
   }
 }
 
-impl CellsUpdaterOptions for WorldUpdaterOptionsAdapter {
+impl CellsUpdaterOptions for RootUpdaterOptionsAdapter {
   fn get_pause(&self) -> bool {
     self.options.borrow().get_pause()
   }
 }
 
-impl ClockUpdaterOptions for WorldUpdaterOptionsAdapter {
+impl ClockUpdaterOptions for RootUpdaterOptionsAdapter {
   fn get_pause(&self) -> bool {
     self.options.borrow().get_pause()
   }
 }
 
-impl OverlayUpdaterOptions for WorldUpdaterOptionsAdapter {
+impl OverlayUpdaterOptions for RootUpdaterOptionsAdapter {
   fn get_pause(&self) -> bool {
     self.options.borrow().get_pause()
   }
 }
 
-pub struct WorldUpdater {
+pub struct RootUpdater {
   child_updaters: Vec<Box<dyn Updater>>,
 }
 
-impl WorldUpdater {
+impl RootUpdater {
   pub fn new(
-    configuration: WorldUpdaterConfiguration,
-    events: Rc<RefCell<dyn WorldUpdaterEvents>>,
+    configuration: RootUpdaterConfiguration,
+    events: Rc<RefCell<dyn RootUpdaterEvents>>,
     frame_rater: Rc<RefCell<dyn FrameRater>>,
-    inputs: Rc<RefCell<dyn WorldUpdaterInputs>>,
+    inputs: Rc<RefCell<dyn RootUpdaterInputs>>,
     options: Rc<RefCell<Options>>,
-    world: Rc<RefCell<World>>,
+    root_model: Rc<RefCell<Root>>,
   ) -> Self {
-    let world_updater_events_adapter =
-      Rc::new(RefCell::new(WorldUpdaterEventsAdapter::new(events.clone())));
-    let world_updater_inputs_adapter = Rc::new(RefCell::new(
-      WorldUpdaterInputsAdapter::new(events.clone(), inputs.clone()),
+    let root_updater_events_adapter =
+      Rc::new(RefCell::new(RootUpdaterEventsAdapter::new(events.clone())));
+    let root_updater_inputs_adapter = Rc::new(RefCell::new(
+      RootUpdaterInputsAdapter::new(events.clone(), inputs.clone()),
     ));
-    let world_updater_options_adapter = Rc::new(RefCell::new(
-      WorldUpdaterOptionsAdapter::new(options.clone()),
+    let root_updater_options_adapter = Rc::new(RefCell::new(
+      RootUpdaterOptionsAdapter::new(options.clone()),
     ));
-    let world: Ref<World> = world.borrow();
-    let cells = world.cells.clone();
-    let clock = world.clock.clone();
+    let root_model: Ref<Root> = root_model.borrow();
+    let cells = root_model.cells.clone();
+    let clock = root_model.clock.clone();
     let cells_updater = CellsUpdater::new(
       cells,
-      world_updater_events_adapter.clone(),
-      world_updater_inputs_adapter.clone(),
-      world_updater_options_adapter.clone(),
+      root_updater_events_adapter.clone(),
+      root_updater_inputs_adapter.clone(),
+      root_updater_options_adapter.clone(),
     );
     let clock_updater = ClockUpdater::new(
       clock.clone(),
-      world_updater_events_adapter.clone(),
-      world_updater_inputs_adapter.clone(),
-      world_updater_options_adapter.clone(),
+      root_updater_events_adapter.clone(),
+      root_updater_inputs_adapter.clone(),
+      root_updater_options_adapter.clone(),
     );
     let frame_rater_updater = FrameRaterUpdater::new(
       false,
       frame_rater.clone(),
-      world_updater_inputs_adapter.clone(),
+      root_updater_inputs_adapter.clone(),
     );
-    let overlay: Rc<RefCell<Overlay>> = world.overlay.clone();
+    let overlay: Rc<RefCell<Overlay>> = root_model.overlay.clone();
     let options_updater =
-      OptionsUpdater::new(world_updater_inputs_adapter.clone(), options);
+      OptionsUpdater::new(root_updater_inputs_adapter.clone(), options);
     let overlay_updater = OverlayUpdater::new(
       clock,
-      world_updater_events_adapter.clone(),
+      root_updater_events_adapter.clone(),
       frame_rater,
-      world_updater_inputs_adapter.clone(),
-      world_updater_options_adapter,
+      root_updater_inputs_adapter.clone(),
+      root_updater_options_adapter,
       overlay,
     );
     let metronome = Rc::new(RefCell::new(DeltaMetronome {
@@ -323,8 +323,8 @@ impl WorldUpdater {
       time_millis_next_tick: 0.,
     }));
     let metronome_updater = MetronomeUpdater::new(
-      world_updater_events_adapter,
-      world_updater_inputs_adapter,
+      root_updater_events_adapter,
+      root_updater_inputs_adapter,
       metronome,
     );
     let child_updaters: Vec<Box<dyn Updater>> = vec![
@@ -341,7 +341,7 @@ impl WorldUpdater {
   }
 }
 
-impl Updater for WorldUpdater {
+impl Updater for RootUpdater {
   fn update(&mut self) {
     self.child_updaters.iter_mut().for_each(|updater| updater.update());
   }
