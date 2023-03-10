@@ -5,14 +5,14 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-08
+//! - Updated: 2023-03-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 use super::configuration::Configuration;
-use crate::components::life::LifeComponent;
+use crate::components::root::RootComponent;
 use crate::constants::CONFIGURATION;
 use crate::messages::events::Events;
 use crate::messages::inputs::Inputs;
@@ -30,7 +30,7 @@ use std::rc::Rc;
 pub struct Looper {
   events: Rc<RefCell<Events>>,
   inputs: Rc<RefCell<Inputs>>,
-  life_component: LifeComponent,
+  root_component: RootComponent,
   root_updater: RootUpdater,
 }
 
@@ -55,9 +55,9 @@ impl Looper {
     let inputs = Rc::new(RefCell::new(Inputs::default()));
     let options = Rc::new(RefCell::new(Options::default()));
     let root_model = Rc::new(RefCell::new(Root::default()));
-    let life_component = LifeComponent::new(
+    let root_component = RootComponent::new(
       events.clone(),
-      "life",
+      "root",
       inputs.clone(),
       options.clone(),
       root_model.clone(),
@@ -73,7 +73,7 @@ impl Looper {
     Self {
       events,
       inputs,
-      life_component,
+      root_component,
       root_updater,
     }
   }
@@ -87,7 +87,7 @@ impl Default for Looper {
 
 impl Initializer for Looper {
   fn initialize(&mut self) {
-    self.life_component.initialize();
+    self.root_component.initialize();
     self.inputs.borrow_mut().reset_requested = true;
   }
 }
@@ -98,9 +98,9 @@ impl LoopUpdater for Looper {
     current_time_millis: f64,
   ) {
     self.inputs.borrow_mut().current_time_millis = current_time_millis;
-    self.life_component.update();
+    self.root_component.update();
     self.root_updater.update();
-    self.life_component.paint();
+    self.root_component.paint();
     self.events.borrow_mut().clear();
     self.inputs.borrow_mut().clear();
   }

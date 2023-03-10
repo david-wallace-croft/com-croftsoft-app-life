@@ -1,11 +1,11 @@
 // =============================================================================
-//! - Life Component for CroftSoft Life
+//! - Root Component for CroftSoft Life
 //!
 //! # Metadata
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-08
+//! - Updated: 2023-03-09
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -27,7 +27,7 @@ use core::cell::RefCell;
 use std::rc::Rc;
 use web_sys::{Document, HtmlCollection};
 
-pub struct LifeComponent {
+pub struct RootComponent {
   canvas_component: Rc<RefCell<CanvasComponent>>,
   components: [Rc<RefCell<dyn Component>>; 5],
   events: Rc<RefCell<Events>>,
@@ -37,7 +37,7 @@ pub struct LifeComponent {
   speed_component: Rc<RefCell<SpeedComponent>>,
 }
 
-impl LifeComponent {
+impl RootComponent {
   pub fn new(
     events: Rc<RefCell<Events>>,
     // TODO: do something with the ID
@@ -81,7 +81,7 @@ impl LifeComponent {
   }
 }
 
-impl Component for LifeComponent {
+impl Component for RootComponent {
   fn make_html(&self) -> String {
     let canvas_html: String = self.canvas_component.borrow().make_html();
     let frame_rate_html: String =
@@ -91,7 +91,7 @@ impl Component for LifeComponent {
     let speed_html: String = self.speed_component.borrow().make_html();
     // TODO: Assemble this from an HTML template
     [
-      String::from("<div id=\"life\">"),
+      String::from("<div id=\"root\">"),
       canvas_html,
       String::from("<br>"),
       reset_html,
@@ -104,7 +104,7 @@ impl Component for LifeComponent {
   }
 }
 
-impl Initializer for LifeComponent {
+impl Initializer for RootComponent {
   fn initialize(&mut self) {
     let document: Document = get_window().unwrap().document().unwrap();
     let html_collection: HtmlCollection =
@@ -121,7 +121,7 @@ impl Initializer for LifeComponent {
   }
 }
 
-impl Painter for LifeComponent {
+impl Painter for RootComponent {
   fn paint(&mut self) {
     if !self.events.borrow().updated {
       return;
@@ -130,7 +130,7 @@ impl Painter for LifeComponent {
   }
 }
 
-impl Updater for LifeComponent {
+impl Updater for RootComponent {
   fn update(&mut self) {
     self
       .components
