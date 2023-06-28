@@ -16,24 +16,24 @@ version = "0.4.1-SNAPSHOT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.66"
+anyhow = "1.0.71"
 # com-croftsoft-lib-animation = { path = "../../../crates/com-croftsoft-lib-animation" }
 # com-croftsoft-lib-animation = { git = "https://github.com/david-wallace-croft/com-croftsoft-lib-animation" }
 com-croftsoft-lib-animation = "0.0.5"
 com-croftsoft-lib-role = "0.2.0"
 console_error_panic_hook = "0.1.7"
-futures = "0.3.26"
-js-sys = "0.3.61"
+futures = "0.3.28"
+js-sys = "0.3.63"
 rand = "0.8.5"
-wasm-bindgen = "0.2.84"
-wasm-bindgen-futures = "0.4.34"
+wasm-bindgen = "0.2.86"
+wasm-bindgen-futures = "0.4.36"
 wee_alloc = { version = "0.4.5", optional = true }
 
 [dependencies.getrandom]
 features = [
   "js",
 ]
-version = "0.2.8"
+version = "0.2.9"
 
 [dependencies.web-sys]
 features = [
@@ -51,10 +51,10 @@ features = [
   "Window",
   "console",
 ]
-version = "0.3.61"
+version = "0.3.63"
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.34"
+wasm-bindgen-test = "0.3.36"
 
 [features]
 default = ["wee_alloc"]
