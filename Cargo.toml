@@ -10,7 +10,7 @@ name = "com-croftsoft-app-life"
 publish = false
 readme = "README.md"
 repository = "https://github.com/david-wallace-croft/com-croftsoft-app-life"
-version = "0.4.1"
+version = "0.4.2-SNAPSHOT"
 
 [dependencies]
 anyhow = "1.0.72"
