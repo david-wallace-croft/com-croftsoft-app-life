@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-02-24
+//! - Updated: 2023-07-21
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -18,6 +18,7 @@ use crate::engine::functions::location::{
 use crate::models::cells::Cells;
 use com_croftsoft_lib_role::Updater;
 use core::cell::{RefCell, RefMut};
+use std::cmp::Ordering;
 use std::rc::Rc;
 // TODO: Should I be using the js_sys random?
 use rand::{rngs::ThreadRng, Rng};
@@ -124,16 +125,12 @@ impl Updater for CellsUpdater {
     if time_to_update && !self.options.borrow().get_pause() {
       self.cells.borrow_mut().swap_new_and_old();
       for i in 0..CELL_COUNT {
-        let count = self.count_adjacent_alive(i);
+        let count: usize = self.count_adjacent_alive(i);
         let mut cells: RefMut<Cells> = self.cells.borrow_mut();
-        if count < 2 {
-          cells.new[i] = false;
-        } else if count == 2 {
-          cells.new[i] = cells.old[i];
-        } else if count == 3 {
-          cells.new[i] = true;
-        } else {
-          cells.new[i] = false;
+        cells.new[i] = match count.cmp(&2) {
+          Ordering::Less => false,
+          Ordering::Equal => cells.old[i],
+          Ordering::Greater => count == 3,
         }
       }
       self.events.borrow_mut().set_updated();
