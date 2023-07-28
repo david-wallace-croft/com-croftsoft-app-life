@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-03-08
+//! - Updated: 2023-07-28
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -150,7 +150,10 @@ impl ClockUpdaterInputs for RootUpdaterInputsAdapter {
 
 impl FrameRaterUpdaterInputs for RootUpdaterInputsAdapter {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
-    self.inputs.borrow().get_frame_rate_display_change_requested()
+    self
+      .inputs
+      .borrow()
+      .get_frame_rate_display_change_requested()
   }
 
   fn get_reset_requested(&self) -> bool {
@@ -186,7 +189,10 @@ impl MetronomeUpdaterInputs for RootUpdaterInputsAdapter {
 
 impl OptionsUpdaterInputs for RootUpdaterInputsAdapter {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
-    self.inputs.borrow().get_frame_rate_display_change_requested()
+    self
+      .inputs
+      .borrow()
+      .get_frame_rate_display_change_requested()
   }
 
   fn get_pause_change_requested(&self) -> Option<bool> {
@@ -216,7 +222,10 @@ impl OverlayUpdaterInputs for RootUpdaterInputsAdapter {
   }
 
   fn get_frame_rate_display_change_requested(&self) -> Option<bool> {
-    self.inputs.borrow().get_frame_rate_display_change_requested()
+    self
+      .inputs
+      .borrow()
+      .get_frame_rate_display_change_requested()
   }
 
   fn get_pause_change_requested(&self) -> Option<bool> {
@@ -343,6 +352,9 @@ impl RootUpdater {
 
 impl Updater for RootUpdater {
   fn update(&mut self) {
-    self.child_updaters.iter_mut().for_each(|updater| updater.update());
+    self
+      .child_updaters
+      .iter_mut()
+      .for_each(|updater| updater.update());
   }
 }

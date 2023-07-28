@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-10
-//! - Updated: 2023-03-03
+//! - Updated: 2023-07-28
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -51,7 +51,9 @@ impl Painter for OverlayPainter {
     context.fill_text(&overlay.clock_string, 4.0, 17.0).unwrap();
     let options = self.options.borrow();
     if options.frame_rate_display && !options.pause {
-      context.fill_text(&overlay.frame_rate_string, 4.0, 34.0).unwrap();
+      context
+        .fill_text(&overlay.frame_rate_string, 4.0, 34.0)
+        .unwrap();
     }
   }
 }
