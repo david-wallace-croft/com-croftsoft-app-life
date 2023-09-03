@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-07-21
+//! - Updated: 2023-09-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -105,7 +105,7 @@ impl CellsUpdater {
     }
   }
 
-  fn randomize(&mut self) {
+  fn randomize(&self) {
     let mut thread_rng: ThreadRng = rand::thread_rng();
     for i in 0..CELL_COUNT {
       let roll: usize = thread_rng.gen_range(0..4);
@@ -115,7 +115,7 @@ impl CellsUpdater {
 }
 
 impl Updater for CellsUpdater {
-  fn update(&mut self) {
+  fn update(&self) {
     if self.inputs.borrow().get_reset_requested() {
       self.randomize();
       self.events.borrow_mut().set_updated();

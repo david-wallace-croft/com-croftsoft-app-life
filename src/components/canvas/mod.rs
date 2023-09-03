@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-08
+//! - Updated: 2023-09-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -21,7 +21,7 @@ use crate::painters::root::RootPainter;
 use com_croftsoft_lib_animation::web_sys::{
   add_mouse_down_handler_by_id, get_canvas_xy, get_html_canvas_element_by_id,
 };
-use com_croftsoft_lib_role::{Initializer, Painter, Updater};
+use com_croftsoft_lib_role::{InitializerMut, Painter, UpdaterMut};
 use core::cell::RefCell;
 use futures::channel::mpsc::{TryRecvError, UnboundedReceiver};
 use std::rc::Rc;
@@ -103,7 +103,7 @@ impl Component for CanvasComponent {
   }
 }
 
-impl Initializer for CanvasComponent {
+impl InitializerMut for CanvasComponent {
   fn initialize(&mut self) {
     self.unbounded_receiver_option = add_mouse_down_handler_by_id(&self.id);
     self.root_painter_option = Some(RootPainter::new(
@@ -115,14 +115,14 @@ impl Initializer for CanvasComponent {
 }
 
 impl Painter for CanvasComponent {
-  fn paint(&mut self) {
-    if let Some(root_painter) = &mut self.root_painter_option {
+  fn paint(&self) {
+    if let Some(root_painter) = &self.root_painter_option {
       root_painter.paint();
     }
   }
 }
 
-impl Updater for CanvasComponent {
+impl UpdaterMut for CanvasComponent {
   fn update(&mut self) {
     let mouse_event_option = self.poll_mouse_event();
     if let Some(mouse_event) = mouse_event_option {

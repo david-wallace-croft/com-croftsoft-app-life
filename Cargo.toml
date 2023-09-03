@@ -13,9 +13,9 @@ repository = "https://github.com/david-wallace-croft/com-croftsoft-app-life"
 version = "0.4.2-SNAPSHOT"
 
 [dependencies]
-anyhow = "1.0.72"
-com-croftsoft-lib-animation = "0.0.6"
-com-croftsoft-lib-role = "0.3.0"
+anyhow = "1.0.75"
+com-croftsoft-lib-animation = "0.0.7"
+com-croftsoft-lib-role = "0.4.0"
 console_error_panic_hook = "0.1.7"
 futures = "0.3.28"
 js-sys = "0.3.64"
@@ -24,9 +24,7 @@ wasm-bindgen = "0.2.87"
 wasm-bindgen-futures = "0.4.37"
 
 [dependencies.getrandom]
-features = [
-  "js",
-]
+features = ["js"]
 version = "0.2.10"
 
 [dependencies.web-sys]

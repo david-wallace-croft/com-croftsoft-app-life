@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-07-28
+//! - Updated: 2023-09-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -351,10 +351,10 @@ impl RootUpdater {
 }
 
 impl Updater for RootUpdater {
-  fn update(&mut self) {
+  fn update(&self) {
     self
       .child_updaters
-      .iter_mut()
+      .iter()
       .for_each(|updater| updater.update());
   }
 }

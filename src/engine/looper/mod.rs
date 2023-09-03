@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-09
+//! - Updated: 2023-09-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -22,7 +22,7 @@ use crate::updaters::root::{RootUpdater, RootUpdaterConfiguration};
 use com_croftsoft_lib_animation::frame_rater::simple::SimpleFrameRater;
 use com_croftsoft_lib_animation::frame_rater::FrameRater;
 use com_croftsoft_lib_animation::web_sys::{spawn_local_loop, LoopUpdater};
-use com_croftsoft_lib_role::{Initializer, Painter, Updater};
+use com_croftsoft_lib_role::{InitializerMut, Painter, Updater, UpdaterMut};
 use core::cell::RefCell;
 use std::rc::Rc;
 
@@ -85,7 +85,7 @@ impl Default for Looper {
   }
 }
 
-impl Initializer for Looper {
+impl InitializerMut for Looper {
   fn initialize(&mut self) {
     self.root_component.initialize();
     self.inputs.borrow_mut().reset_requested = true;

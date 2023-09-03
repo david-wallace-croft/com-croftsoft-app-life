@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-23
-//! - Updated: 2023-02-24
+//! - Updated: 2023-09-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -43,7 +43,7 @@ impl OptionsUpdater {
 }
 
 impl Updater for OptionsUpdater {
-  fn update(&mut self) {
+  fn update(&self) {
     let inputs: Ref<dyn OptionsUpdaterInputs> = self.inputs.borrow();
     if let Some(frame_rate_display) =
       inputs.get_frame_rate_display_change_requested()

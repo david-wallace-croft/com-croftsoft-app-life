@@ -4,9 +4,9 @@ version = 3
 
 [[package]]
 name = "anyhow"
-version = "1.0.72"
+version = "1.0.75"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b13c32d80ecc7ab747b80c3784bce54ee8a7a0cc4fbda9bf4cda2cf6fe90854"
+checksum = "a4668cab20f66d8d020e1fbc0ebe47217433c1b6c8f2040faf858554e394ace6"
 
 [[package]]
 name = "autocfg"
@@ -46,9 +46,9 @@ dependencies = [
 
 [[package]]
 name = "com-croftsoft-lib-animation"
-version = "0.0.6"
+version = "0.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c96bcd0ebeef9a1e4ae2552e736f1189e6c65c61b7e3332fe769173f6792a3eb"
+checksum = "d66ac34cf857e9592245dd20f103b167cb3d278ecb92c03cc91bfbf88a9b88fd"
 dependencies = [
  "anyhow",
  "com-croftsoft-lib-role",
@@ -61,9 +61,9 @@ dependencies = [
 
 [[package]]
 name = "com-croftsoft-lib-role"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "961553c2c565dab54c88c2e39f4eb839ce52116afcfd032b5380dfa484f0b25f"
+checksum = "641b0e6c3294c652db55beeeac9d73a8b8a6766e017007eb27831db3b3438727"
 
 [[package]]
 name = "console_error_panic_hook"

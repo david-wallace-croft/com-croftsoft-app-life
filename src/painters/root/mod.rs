@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-03-08
+//! - Updated: 2023-09-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -75,7 +75,7 @@ impl RootPainter {
 }
 
 impl Painter for RootPainter {
-  fn paint(&mut self) {
-    self.painters.iter_mut().for_each(|painter| painter.paint());
+  fn paint(&self) {
+    self.painters.iter().for_each(|painter| painter.paint());
   }
 }

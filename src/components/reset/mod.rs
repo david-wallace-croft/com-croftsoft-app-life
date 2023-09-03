@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-11
-//! - Updated: 2023-03-07
+//! - Updated: 2023-09-03
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -14,7 +14,7 @@
 use crate::engine::traits::Component;
 use crate::messages::inputs::Inputs;
 use com_croftsoft_lib_animation::web_sys::add_click_handler_by_id;
-use com_croftsoft_lib_role::{Initializer, Updater};
+use com_croftsoft_lib_role::{InitializerMut, UpdaterMut};
 use core::cell::RefCell;
 use futures::channel::mpsc::UnboundedReceiver;
 use std::rc::Rc;
@@ -54,13 +54,13 @@ impl Component for ResetComponent {
   }
 }
 
-impl Initializer for ResetComponent {
+impl InitializerMut for ResetComponent {
   fn initialize(&mut self) {
     self.unbounded_receiver = add_click_handler_by_id(&self.id);
   }
 }
 
-impl Updater for ResetComponent {
+impl UpdaterMut for ResetComponent {
   fn update(&mut self) {
     if self.pressed() {
       self.inputs.borrow_mut().reset_requested = true;
