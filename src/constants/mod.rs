@@ -2,10 +2,10 @@
 //! - CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2024 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-07-28
+//! - Updated: 2024-02-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -14,7 +14,7 @@
 use crate::engine::configuration::Configuration;
 
 pub static INFO: &str =
-  "CroftSoft Life v0.4.2-SNAPSHOT Copyright 2023 CroftSoft Inc";
+  "CroftSoft Life v0.4.2-SNAPSHOT Copyright 2023-2024 CroftSoft Inc";
 
 pub const CELL_COUNT: usize = SPACE_HEIGHT * SPACE_WIDTH;
 pub const CELL_PAINT_OFFSET: f64 = (1. - CELL_PAINT_SIZE) / 2.;
