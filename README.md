@@ -11,6 +11,11 @@
 
 ![CroftSoft Life version 0.2.0](./media/croftsoft-life-v0.2.0-2023-01-14-a.png)
 
+## Update 2025-04-06
+
+- You might have to revert npm to version 8.19.4 to get this to work again
+- See https://github.com/parrotmac/rust-wasm-hello-world
+
 ## Usage
 
 - cd com-croftsoft-app-life/
