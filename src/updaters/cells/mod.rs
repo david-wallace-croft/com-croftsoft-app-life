@@ -2,10 +2,10 @@
 //! - Cells Updater for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-09-03
+//! - Updated: 2026-08-22
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -16,12 +16,11 @@ use crate::engine::functions::location::{
   to_index_from_xy, to_x_from_index, to_y_from_index,
 };
 use crate::models::cells::Cells;
+use ::web_sys::js_sys::Math::random;
 use com_croftsoft_lib_role::Updater;
 use core::cell::{RefCell, RefMut};
 use std::cmp::Ordering;
 use std::rc::Rc;
-// TODO: Should I be using the js_sys random?
-use rand::{rngs::ThreadRng, Rng};
 
 pub trait CellsUpdaterEvents {
   fn set_updated(&mut self);
@@ -106,9 +105,8 @@ impl CellsUpdater {
   }
 
   fn randomize(&self) {
-    let mut thread_rng: ThreadRng = rand::thread_rng();
     for i in 0..CELL_COUNT {
-      let roll: usize = thread_rng.gen_range(0..4);
+      let roll: usize = (random() * 4.) as usize;
       self.cells.borrow_mut().new[i] = roll == 0;
     }
   }

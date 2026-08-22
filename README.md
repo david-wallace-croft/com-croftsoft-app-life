@@ -11,9 +11,9 @@
 
 ![CroftSoft Life version 0.2.0](./media/croftsoft-life-v0.2.0-2023-01-14-a.png)
 
-## Update 2025-04-06
+## Update 2026-08-22
 
-- You might have to revert npm to version 8.19.4 to get this to work again
+- Replaced the webpack build because it stopped working after npm 8.19.4
 - See https://github.com/parrotmac/rust-wasm-hello-world
 
 ## Usage
@@ -24,4 +24,5 @@
 
 ## History
 
-- Initial release: 2023-01-06
+- 2023-01-06: Initial release
+- 2026-08-22: Replaced the webpack build

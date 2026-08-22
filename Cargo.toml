@@ -2,7 +2,7 @@
 authors = ["David Wallace Croft <david@croftsoft.com>"]
 categories = ["games", "simulation"]
 description = "Conway's Game of Life"
-edition = "2021"
+edition = "2024"
 homepage = "https://www.croftsoft.com/"
 keywords = ["rust", "wasm"]
 license = "MIT"
@@ -10,23 +10,18 @@ name = "com-croftsoft-app-life"
 publish = false
 readme = "README.md"
 repository = "https://github.com/david-wallace-croft/com-croftsoft-app-life"
-rust-version = "1.58.1"
-version = "0.4.2-SNAPSHOT"
+rust-version = "1.98"
+version = "0.5.0"
 
 [dependencies]
-anyhow = "1.0.80"
+anyhow = "1.0.104"
 com-croftsoft-lib-animation = "0.0.8"
 com-croftsoft-lib-role = "0.5.1"
 console_error_panic_hook = "0.1.7"
-futures = "0.3.30"
-js-sys = "0.3.68"
-rand = "0.8.5"
-wasm-bindgen = "0.2.91"
-wasm-bindgen-futures = "0.4.41"
-
-[dependencies.getrandom]
-features = ["js"]
-version = "0.2.12"
+futures = "0.3.34"
+js-sys = "0.3.104"
+wasm-bindgen = "0.2.127"
+wasm-bindgen-futures = "0.4.77"
 
 [dependencies.web-sys]
 features = [
@@ -44,10 +39,10 @@ features = [
   "Window",
   "console",
 ]
-version = "0.3.68"
+version = "~0.3.104"
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.41"
+wasm-bindgen-test = "~0.3.77"
 
 [lib]
 crate-type = ["cdylib"]
