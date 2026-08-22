@@ -11,7 +11,7 @@ publish = false
 readme = "README.md"
 repository = "https://github.com/david-wallace-croft/com-croftsoft-app-life"
 rust-version = "1.98"
-version = "0.5.0"
+version = "0.5.1-SNAPSHOT"
 
 [dependencies]
 anyhow = "1.0.104"
