@@ -14,14 +14,14 @@ rust-version = "1.98"
 version = "0.5.1-SNAPSHOT"
 
 [dependencies]
-anyhow = "1.0.104"
-com-croftsoft-lib-animation = "0.0.8"
-com-croftsoft-lib-role = "0.5.1"
-console_error_panic_hook = "0.1.7"
-futures = "0.3.34"
-js-sys = "0.3.104"
-wasm-bindgen = "0.2.127"
-wasm-bindgen-futures = "0.4.77"
+anyhow = "~1.0.104"
+com-croftsoft-lib-animation = "~0.0.8"
+com-croftsoft-lib-role = "~0.5.1"
+console_error_panic_hook = "~0.1.7"
+futures = "~0.3.34"
+js-sys = "~0.3.104"
+wasm-bindgen = "~0.2.127"
+wasm-bindgen-futures = "~0.4.77"
 
 [dependencies.web-sys]
 features = [
