@@ -2,10 +2,10 @@
 //! - Overlay Updater for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-09-03
+//! - Updated: 2026-08-27
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -15,8 +15,8 @@ use crate::constants::OVERLAY_REFRESH_PERIOD_MILLIS;
 use crate::models::clock::Clock;
 use crate::models::overlay::Overlay;
 use com_croftsoft_lib_animation::frame_rater::FrameRater;
-use com_croftsoft_lib_animation::metronome::delta::DeltaMetronome;
 use com_croftsoft_lib_animation::metronome::Metronome;
+use com_croftsoft_lib_animation::metronome::delta::DeltaMetronome;
 use com_croftsoft_lib_role::Updater;
 use core::cell::{Ref, RefCell, RefMut};
 use std::rc::Rc;

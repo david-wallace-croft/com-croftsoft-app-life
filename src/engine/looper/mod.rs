@@ -2,10 +2,10 @@
 //! - Looper for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-09-03
+//! - Updated: 2026-08-27
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -19,9 +19,9 @@ use crate::messages::inputs::Inputs;
 use crate::models::options::Options;
 use crate::models::root::Root;
 use crate::updaters::root::{RootUpdater, RootUpdaterConfiguration};
-use com_croftsoft_lib_animation::frame_rater::simple::SimpleFrameRater;
 use com_croftsoft_lib_animation::frame_rater::FrameRater;
-use com_croftsoft_lib_animation::web_sys::{spawn_local_loop, LoopUpdater};
+use com_croftsoft_lib_animation::frame_rater::simple::SimpleFrameRater;
+use com_croftsoft_lib_animation::web_sys::{LoopUpdater, spawn_local_loop};
 use com_croftsoft_lib_role::{InitializerMut, Painter, Updater, UpdaterMut};
 use core::cell::RefCell;
 use std::rc::Rc;

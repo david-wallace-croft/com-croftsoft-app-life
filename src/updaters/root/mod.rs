@@ -2,10 +2,10 @@
 //! - Root Updater for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-24
-//! - Updated: 2023-09-03
+//! - Updated: 2026-08-27
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -25,9 +25,9 @@ use super::overlay::{
 use crate::models::options::Options;
 use crate::models::overlay::Overlay;
 use crate::models::root::Root;
+use com_croftsoft_lib_animation::frame_rater::FrameRater;
 use com_croftsoft_lib_animation::frame_rater::updater::FrameRaterUpdater;
 use com_croftsoft_lib_animation::frame_rater::updater::FrameRaterUpdaterInputs;
-use com_croftsoft_lib_animation::frame_rater::FrameRater;
 use com_croftsoft_lib_animation::metronome::delta::DeltaMetronome;
 use com_croftsoft_lib_animation::metronome::updater::{
   MetronomeUpdater, MetronomeUpdaterEvents, MetronomeUpdaterInputs,

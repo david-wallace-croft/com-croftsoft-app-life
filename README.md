@@ -1,9 +1,12 @@
 # CroftSoft Life
 
 [![MIT licensed][mit-badge]][mit-url]
+[![Rust][rust-badge]][rust-url]
 
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-url]: https://github.com/david-wallace-croft/com-croftsoft-app-life/blob/main/LICENSE.txt
+[rust-badge]: https://github.com/david-wallace-croft/com-croftsoft-app-life/actions/workflows/rust.yml/badge.svg
+[rust-url]: https://github.com/david-wallace-croft/com-croftsoft-app-life/actions/workflows/rust.yml
 
 - Conway's Game of Life
 - You can see the Rust code compiled to WebAssembly and running in the browser

@@ -2,10 +2,10 @@
 //! - Root Painter for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-09-03
+//! - Updated: 2026-08-27
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -23,7 +23,7 @@ use js_sys::Object;
 use std::rc::Rc;
 use wasm_bindgen::JsCast;
 use web_sys::{
-  window, CanvasRenderingContext2d, Document, Element, HtmlCanvasElement,
+  CanvasRenderingContext2d, Document, Element, HtmlCanvasElement, window,
 };
 
 pub struct RootPainter {
