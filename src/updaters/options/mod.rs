@@ -2,10 +2,10 @@
 //! - Options Updater for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023-2024 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-23
-//! - Updated: 2024-07-29
+//! - Updated: 2026-08-29
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -20,12 +20,16 @@ pub trait OptionsUpdaterInputs {
   fn get_frame_rate_display_change_requested(&self) -> Option<bool>;
   fn get_pause_change_requested(&self) -> Option<bool>;
   // TODO: clippy says this is never used
+  #[expect(dead_code)]
   fn get_reset_requested(&self) -> bool;
   // TODO: clippy says this is never used
+  #[expect(dead_code)]
   fn get_time_to_update(&self) -> bool;
   // TODO: clippy says this is never used
+  #[expect(dead_code)]
   fn get_update_period_millis_changed(&self) -> Option<f64>;
   // TODO: clippy says this is never used
+  #[expect(dead_code)]
   fn get_update_time_millis(&self) -> f64;
 }
 

@@ -2,14 +2,17 @@
 //! - CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-06
-//! - Updated: 2023-07-21
+//! - Updated: 2026-08-29
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
+
+// TODO
+#![expect(deprecated)]
 
 use com_croftsoft_lib_animation::web_sys::log;
 use constants::INFO;
