@@ -2,10 +2,10 @@
 //! - Canvas Component for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2023-09-03
+//! - Updated: 2026-09-01
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -66,10 +66,10 @@ impl CanvasComponent {
   fn poll_mouse_event(&mut self) -> Option<MouseEvent> {
     let unbounded_receiver: &mut UnboundedReceiver<MouseEvent> =
       self.unbounded_receiver_option.as_mut()?;
-    let result: Result<Option<MouseEvent>, TryRecvError> =
-      unbounded_receiver.try_next();
-    if let Ok(mouse_event_option) = result {
-      return mouse_event_option;
+    let result: Result<MouseEvent, TryRecvError> =
+      unbounded_receiver.try_recv();
+    if let Ok(mouse_event) = result {
+      return Some(mouse_event);
     }
     None
   }

@@ -2,10 +2,10 @@
 //! - Speed Component for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-02-13
-//! - Updated: 2023-09-03
+//! - Updated: 2026-09-01
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -32,10 +32,9 @@ impl SpeedComponent {
   fn changed(&mut self) -> Option<Event> {
     let unbounded_receiver: &mut UnboundedReceiver<Event> =
       self.unbounded_receiver.as_mut()?;
-    let result: Result<Option<Event>, TryRecvError> =
-      unbounded_receiver.try_next();
-    if let Ok(event_option) = result {
-      return event_option;
+    let result: Result<Event, TryRecvError> = unbounded_receiver.try_recv();
+    if let Ok(event) = result {
+      return Some(event);
     }
     None
   }

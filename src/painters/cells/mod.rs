@@ -2,10 +2,10 @@
 //! - Cells Painter for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-10
-//! - Updated: 2023-09-03
+//! - Updated: 2026-09-01
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -17,15 +17,16 @@ use crate::models::cells::Cells;
 use com_croftsoft_lib_role::Painter;
 use core::cell::{Ref, RefCell};
 use std::rc::Rc;
-use wasm_bindgen::JsValue;
 use web_sys::CanvasRenderingContext2d;
+
+const FILL_STYLE_LIGHT_GREEN: &str = "lightgreen";
 
 pub struct CellsPainter {
   cells: Rc<RefCell<Cells>>,
   cells_height: f64,
   cells_width: f64,
   context: Rc<RefCell<CanvasRenderingContext2d>>,
-  fill_style: JsValue,
+  fill_style: &'static str,
   scale_x: f64,
   scale_y: f64,
 }
@@ -39,13 +40,12 @@ impl CellsPainter {
   ) -> Self {
     let cells_height = (CELL_PAINT_SIZE * scale_y).trunc();
     let cells_width = (CELL_PAINT_SIZE * scale_x).trunc();
-    let fill_style = JsValue::from_str("lightgreen");
     Self {
       cells_height,
       cells_width,
       cells,
       context,
-      fill_style,
+      fill_style: FILL_STYLE_LIGHT_GREEN,
       scale_x,
       scale_y,
     }
@@ -55,7 +55,7 @@ impl CellsPainter {
 impl Painter for CellsPainter {
   fn paint(&self) {
     let context = self.context.borrow();
-    context.set_fill_style(&self.fill_style);
+    context.set_fill_style_str(self.fill_style);
     let cells: Ref<Cells> = self.cells.borrow();
     for index in 0..CELL_COUNT {
       if !cells.new[index] {

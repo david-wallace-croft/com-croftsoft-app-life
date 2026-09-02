@@ -2,10 +2,10 @@
 //! - Reset Component for CroftSoft Life
 //!
 //! # Metadata
-//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-11
-//! - Updated: 2023-09-03
+//! - Updated: 2026-09-01
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -41,10 +41,7 @@ impl ResetComponent {
     if self.unbounded_receiver.is_none() {
       return false;
     }
-    matches!(
-      self.unbounded_receiver.as_mut().unwrap().try_next(),
-      Ok(Some(()))
-    )
+    matches!(self.unbounded_receiver.as_mut().unwrap().try_recv(), Ok(()))
   }
 }
 
