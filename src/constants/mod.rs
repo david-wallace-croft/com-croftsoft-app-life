@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2026-08-22
+//! - Updated: 2026-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -13,8 +13,11 @@
 
 use crate::engine::configuration::Configuration;
 
-pub static INFO: &str =
-  "CroftSoft Life v0.5.0 Copyright 2023-2026 CroftSoft Inc";
+pub const INFO: &str = concat!(
+  "CroftSoft Life v",
+  env!("CARGO_PKG_VERSION"),
+  " \u{00a9} 2023-2026 CroftSoft Inc"
+);
 
 pub const CELL_COUNT: usize = SPACE_HEIGHT * SPACE_WIDTH;
 pub const CELL_PAINT_OFFSET: f64 = (1. - CELL_PAINT_SIZE) / 2.;

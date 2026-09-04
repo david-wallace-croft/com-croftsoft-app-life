@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2023-2026 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2023-01-09
-//! - Updated: 2026-08-27
+//! - Updated: 2026-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -96,12 +96,14 @@ impl LoopUpdater for Looper {
   fn update_loop(
     &mut self,
     current_time_millis: f64,
-  ) {
+  ) -> bool {
     self.inputs.borrow_mut().current_time_millis = current_time_millis;
     self.root_component.update();
     self.root_updater.update();
     self.root_component.paint();
     self.events.borrow_mut().clear();
     self.inputs.borrow_mut().clear();
+
+    false
   }
 }

@@ -15,7 +15,7 @@ version = "0.5.1-SNAPSHOT"
 
 [dependencies]
 anyhow = "~1.0.104"
-com-croftsoft-lib-animation = "~0.0.8"
+com-croftsoft-lib-animation = "~0.1.0"
 com-croftsoft-lib-role = "~0.5.1"
 console_error_panic_hook = "~0.1.7"
 futures = "~0.3.34"
